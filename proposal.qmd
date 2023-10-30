@@ -54,7 +54,7 @@ There are 8 variables in nyt_titles and 6 variables in nyt_full. Here is a data 
 This is a subset/summary of the larger dataset.
 
 | Variable Name | Type        | Description                      | Units  | Range/Value                                                                  |
-|:----------|:----------|:----------|-----------|----------------------------|
+|:------------|:------------|:------------|-------------|----------------------|
 | id            | categorical | Book id                          | NA     | This is random value for each row                                            |
 | title         | character   | Title of book                    | NA     | NA                                                                           |
 | author        | character   | Author                           | NA     | NA                                                                           |
@@ -67,7 +67,7 @@ This is a subset/summary of the larger dataset.
 # `nyt_full`
 
 | Variable Name | Class     | Description    | Unit   | Range/Value                            |
-|:-----------|:-----------|:-----------|------------|-------------------------|
+|:------------|:------------|:------------|-------------|-------------------|
 | year          | double    | Year           | NA     | years from 1931 to 2020                |
 | week          | double    | Week (as date) | YYMMDD | date                                   |
 | rank          | double    | Rank (1 \> 18) | NA     | numeric value which range from 1 to 18 |
@@ -92,8 +92,42 @@ We expect to create
 
 ## Division of Labor
 
-Describe how you plan to work together as a team. Set intermediate deadlines - what do you plan to have done by the project check-in? The more you have done (report/slides/code), the better feedback I can give you.
+Week of Nov 6 - Working on data preprocessing and working on exploration topics 
+
+Week of Nov 13 - Writing the report (Introduction, Methods, Exploration topics)
+
+Finish the data preprocessing, analysis and part of the report before the project check-in
+
+Week of Nov 20 - Working on the changes based on feedback given and writing the report
+
+Week of Nov 27 - Creating the project presentation and video
+
+Week of Dec 4 - Complete the project report
+
+**Data Analysis**
+
+-   Data preprocessing - Dinuwanthi
+
+-   Graphical analysis - Toma, Dinuwanthi
+
+-   Modeling - Ovini
+
+**Report**
+
+-   Introduction - Toma
+
+-   Methods - Toma 
+
+-   Exploration topics - Dinuwanthi and Ovini
+
+-   Conclusion - Dinuwanthi and Ovini
+
+**Slides and video**
+
+Toma, Dinuwanthi, Ovini
 
 ## Additional Comments
 
-What concerns do you have about this project? This is your place to provide feedback about the project guidelines and ask clarifying questions for me to address either individually or in class, if the question is relevant to everyone.
+Can we change the project goals when we start doing the analysis?
+
+The division of labor may change once we start doing the project according to the tasks.
