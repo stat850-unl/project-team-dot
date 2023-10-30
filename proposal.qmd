@@ -54,7 +54,7 @@ There are 8 variables in nyt_titles and 6 variables in nyt_full. Here is a data 
 This is a subset/summary of the larger dataset.
 
 | Variable Name | Type        | Description                      | Units  | Range/Value                                                                  |
-|:------------|:------------|:------------|-------------|----------------------|
+|:-------------|:-------------|:-------------|--------------|-----------------|
 | id            | categorical | Book id                          | NA     | This is random value for each row                                            |
 | title         | character   | Title of book                    | NA     | NA                                                                           |
 | author        | character   | Author                           | NA     | NA                                                                           |
@@ -67,7 +67,7 @@ This is a subset/summary of the larger dataset.
 # `nyt_full`
 
 | Variable Name | Class     | Description    | Unit   | Range/Value                            |
-|:------------|:------------|:------------|-------------|-------------------|
+|:-------------|:-------------|:-------------|--------------|----------------|
 | year          | double    | Year           | NA     | years from 1931 to 2020                |
 | week          | double    | Week (as date) | YYMMDD | date                                   |
 | rank          | double    | Rank (1 \> 18) | NA     | numeric value which range from 1 to 18 |
@@ -75,20 +75,35 @@ This is a subset/summary of the larger dataset.
 | title         | character | Title of book  | NA     | NA                                     |
 | author        | character | Author         | NA     | NA                                     |
 
-Describe why this data is interesting and what you hope to do with it.
+## Project Goals
 
-We will use \[dataset\] to explore the following topics:
+Interesting fact about this dataset is that, book lovers are always curious about what are the bestsellers when selecting the next book to read. As booklovers  it would be exciting for us to explore the below topics to get an overall idea of it. 
 
--   interesting thing 1
--   interesting thing 2
--   ...
+We will use NYT Bestseller dataset (From 2000 to 2020) to explore the following topics:
 
-We expect to create
+-   How the best rank differs from the debut rank.
 
--   description of some of the graphs you might create
--   a shiny application
--   a statistical model
--   ...
+-   What is the highest number of weeks that a book got listed as a bestseller over the years 2000-2020.
+
+-   Find about which authors had the highest number of bestsellers (Top 10 or 20 authors)
+
+-   Do books that debut at a higher rank tend to stay on the list longer?
+
+-   Is there a relationship between the length of the title and the debut rank?
+
+We expect to create:
+
+-   Correlation Between Total Weeks and Debut Rank
+
+-   Correlation between length of the title and the debut rank
+
+-   Scatterplot of debut rank and best rank
+
+-   Bar chart showing the distribution of the total weeks on the bestseller list.
+
+-   Bar chart to display the top authors with the most bestsellers.
+
+-   A regression model to see if there is a relationship between the best rank, weeks of some authors who have been repeatedly appearing during 2015-2020.
 
 ## Division of Labor
 
