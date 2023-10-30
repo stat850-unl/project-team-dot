@@ -1,6 +1,8 @@
 ---
 title: "Stat 850 Project Proposal"
 format: html
+execute:
+  echo: false
 editor: visual
 ---
 
@@ -21,42 +23,57 @@ In the proposal as in the final report, all of your code chunks should be set so
 
 ### Source
 
-The data we are using in this project comes from \[link to web site\].
+```{r}
 
-If you cannot link directly to the data file, then you need to additionally describe how someone could acquire the same data:
+# Get the Data
 
-> You can download the data directly using \[process\]
+tuesdata <- tidytuesdayR::tt_load('2022-05-10')
+tuesdata <- tidytuesdayR::tt_load(2022, week = 19)
 
-Provide some code to read in the data (either stored in the repository or read in directly from the source).
+nyt_titles <- tuesdata$nyt_titles
+
+# Or read in the data manually
+
+nyt_titles <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-10/nyt_titles.tsv')
+nyt_full <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-10/nyt_full.tsv')
+
+```
 
 ### Description
 
-This dataset contains information about ...
+This dataset contains information about the fiction bestseller list of ***The New York Times*** between the years **1931 to 2020**. This dataset includes the title, author(s), publication date, rank, and other information for every work recorded since the list's founding in 1931.
 
-It was collected from ...
+Every row in the dataset represents a single *"entry"*---that is, a single slot for a particular week---on the list. There will usually be ten or fifteen works listed each week. But the number of bestsellers the Times features in a given week varies, so there may be 3, 6, 7, 8, or 16.
 
-Here is a data dictionary showing each variable, the type of variable, units, and range of values that are possible:
+It was collected from ***Tidy Tuesday Archive***. The source link is- https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-05-10/readme.md#nyt_titlestsv
 
-Note: this is an example table, please modify to actually match your data. Ensure that all of the same information is represented.
+There are 8 variables in nyt_titles and 6 variables in nyt_full. Here is a data dictionary showing each variable, the type of variable, units, and range of values that are possible:
 
-+-------------+---------------------------------------------------------+-------------+-------+---------------------------------------------------------------+
-| Name        | Description                                             | Type        | Units | Range/Values                                                  |
-+=============+=========================================================+=============+=======+===============================================================+
-| day_of_week | The day of the week on which the observation took place | categorical | NA    | 0 = Sunday\                                                   |
-|             |                                                         |             |       | 1 = Monday\                                                   |
-|             |                                                         |             |       | ...\                                                          |
-|             |                                                         |             |       | 6 = Saturday\                                                 |
-|             |                                                         |             |       | 7 = Unknown                                                   |
-+-------------+---------------------------------------------------------+-------------+-------+---------------------------------------------------------------+
-| weight      | The weight of the individual                            | numeric     | lbs   | 0 - 300 (max weight measurable on the scale used)\            |
-|             |                                                         |             |       | NA indicates missing data                                     |
-+-------------+---------------------------------------------------------+-------------+-------+---------------------------------------------------------------+
-| time        | The time of the observation                             | numeric     | HHMM  | 0000 corresponds to midnight,                                 |
-|             |                                                         |             |       |                                                               |
-|             |                                                         |             |       | 2359 corresponds to 1 minute before midnight on the same day. |
-+-------------+---------------------------------------------------------+-------------+-------+---------------------------------------------------------------+
+# `nyt_titles`
 
-## Project Goals
+This is a subset/summary of the larger dataset.
+
+| Variable Name | Type        | Description                      | Units  | Range/Value                                                                  |
+|:----------|:----------|:----------|-----------|----------------------------|
+| id            | categorical | Book id                          | NA     | This is random value for each row                                            |
+| title         | character   | Title of book                    | NA     | NA                                                                           |
+| author        | character   | Author                           | NA     | NA                                                                           |
+| year          | double      | Year                             | NA     | years from 1931 to 2020                                                      |
+| total_weeks   | numeric     | Total weeks on best sellers list | NA     | no. of frequency of books appear in weeks as best seller. Like 3,4,15,26,... |
+| first_week    | numeric     | First week on list (date)        | YYMMDD | date                                                                         |
+| debut_rank    | double      | Debut rank on the list           | NA     | numeric value which range from 1 to 17                                       |
+| best_rank     | double      | Best rank                        | NA     | numeric value which range from 1 to 17                                       |
+
+# `nyt_full`
+
+| Variable Name | Class     | Description    | Unit   | Range/Value                            |
+|:-----------|:-----------|:-----------|------------|-------------------------|
+| year          | double    | Year           | NA     | years from 1931 to 2020                |
+| week          | double    | Week (as date) | YYMMDD | date                                   |
+| rank          | double    | Rank (1 \> 18) | NA     | numeric value which range from 1 to 18 |
+| title_id      | double    | Title ID       | NA     | This is random value for each row      |
+| title         | character | Title of book  | NA     | NA                                     |
+| author        | character | Author         | NA     | NA                                     |
 
 Describe why this data is interesting and what you hope to do with it.
 
