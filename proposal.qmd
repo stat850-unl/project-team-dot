@@ -6,19 +6,6 @@ execute:
 editor: visual
 ---
 
-## Instructions
-
-Each member of your team should modify this document in some way and push their modifications to the repository in a separate commit. This will ensure that you have set your repository up in a way that ensures all group members are working with the same repository.
-
-Please ensure that you have set your git name and email address on your computer by **modifying** the following commands and running them in the terminal:
-
-```         
-git config --global user.name "Mona Lisa"
-git config --global user.email "mona@lisa.com"
-```
-
-In the proposal as in the final report, all of your code chunks should be set so that `echo = F`, which prevents the code from being printed in the report. You should also set `message = F, warning = F`, which will reduce the amount of additional output which is present in the report. You can customize the execution of code in quarto by using additional options, some of which are detailed [here](https://quarto.org/docs/computations/execution-options.html).
-
 ## Data
 
 ### Source
@@ -49,12 +36,12 @@ It was collected from ***Tidy Tuesday Archive***. The source link is- https://gi
 
 There are 8 variables in nyt_titles and 6 variables in nyt_full. Here is a data dictionary showing each variable, the type of variable, units, and range of values that are possible:
 
-# `nyt_titles`
+### `nyt_titles`
 
 This is a subset/summary of the larger dataset.
 
 | Variable Name | Type        | Description                      | Units  | Range/Value                                                                  |
-|:-------------|:-------------|:-------------|--------------|-----------------|
+|:--------------|:--------------|:--------------|---------------|---------------|
 | id            | categorical | Book id                          | NA     | This is random value for each row                                            |
 | title         | character   | Title of book                    | NA     | NA                                                                           |
 | author        | character   | Author                           | NA     | NA                                                                           |
@@ -64,10 +51,10 @@ This is a subset/summary of the larger dataset.
 | debut_rank    | double      | Debut rank on the list           | NA     | numeric value which range from 1 to 17                                       |
 | best_rank     | double      | Best rank                        | NA     | numeric value which range from 1 to 17                                       |
 
-# `nyt_full`
+### `nyt_full`
 
 | Variable Name | Class     | Description    | Unit   | Range/Value                            |
-|:-------------|:-------------|:-------------|--------------|----------------|
+|:--------------|:--------------|:--------------|---------------|---------------|
 | year          | double    | Year           | NA     | years from 1931 to 2020                |
 | week          | double    | Week (as date) | YYMMDD | date                                   |
 | rank          | double    | Rank (1 \> 18) | NA     | numeric value which range from 1 to 18 |
@@ -145,4 +132,26 @@ Toma, Dinuwanthi, Ovini
 
 Can we change the project goals when we start doing the analysis?
 
+> yes, some modifications to the goals are fine.
+
 The division of labor may change once we start doing the project according to the tasks.
+
+> that's fair. I just wanted you to think about it ahead of time.
+
+
+-------
+
+Git fame output:
+
+project-team-dot$ git fame .--incl=".(q|Q|r|R)md"
+Processing: 100%|██████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 301.86file/s]
+Total commits: 4
+Total ctimes: 39
+Total files: 7
+Total loc: 384
+| Author                |   loc |   coms |   fils |  distribution   |
+|:----------------------|------:|-------:|-------:|:----------------|
+| github-classroom[bot] |   281 |      1 |      4 | 73.2/25.0/57.1  |
+| Maksuda Aktar Toma    |    40 |      1 |      1 | 10.4/25.0/14.3  |
+| DLiyanage24           |    36 |      1 |      1 | 9.4/25.0/14.3   |
+| OviniKariyawasam      |    27 |      1 |      1 | 7.0/25.0/14.3   |
