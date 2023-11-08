@@ -32,6 +32,7 @@ filtered_data <- result %>%
 ```
 
 ***G-1: How the best rank differs from the debut rank.***
+
 ```{r}
 library(skimr)
 skim(filtered_data)
@@ -43,3 +44,40 @@ filtered_final <- filtered_final %>%
 
 ```
 
+```{r}
+
+library(ggplot2)
+# Create a histogram
+histogram_plot <- ggplot(filtered_final, aes(x = rank_difference)) +
+  geom_histogram(binwidth = 3, fill = "blue", color = "black") +
+  labs(x = "Rank Difference", y = "Frequency") +
+  ggtitle("Histogram of Rank Difference")
+
+# Display the histogram
+print(histogram_plot)
+
+# Create a frequency table for "best rank"
+frequency_best_rank <- table(filtered_final$best_rank)
+
+# Create a frequency table for "debut rank"
+frequency_debut_rank <- table(filtered_final$debut_rank)
+
+# Create a frequency table for "rank difference"
+frequency_rank_difference <- table(filtered_final$rank_difference)
+
+# Create a frequency table for total weeks
+frequency_total_weeks <- table(filtered_final$total_weeks)
+
+# Combine the frequency tables into a single table
+combined_frequency_table <- cbind(
+  Best_Rank = frequency_best_rank,
+  Debut_Rank = frequency_debut_rank,
+  Rank_Difference = frequency_rank_difference,
+  Total_weeks =frequency_total_weeks
+)
+
+
+
+
+
+```
