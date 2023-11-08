@@ -30,3 +30,16 @@ filtered_data <- result %>%
   filter(year >= 2000&year<=2020)
 
 ```
+
+***G-1: How the best rank differs from the debut rank.***
+```{r}
+library(skimr)
+skim(filtered_data)
+
+filtered_final <- filtered_data %>%
+  filter(best_rank <=debut_rank)
+filtered_final <- filtered_final %>%
+  mutate(rank_difference = debut_rank - best_rank)
+
+```
+
