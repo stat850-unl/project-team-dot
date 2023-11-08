@@ -1,0 +1,32 @@
+---
+title: "Analysis"
+format: html
+editor: visual
+---
+
+```{r}
+# Get the Data
+
+tuesdata <- tidytuesdayR::tt_load('2022-05-10')
+tuesdata <- tidytuesdayR::tt_load(2022, week = 19)
+
+nyt_titles <- tuesdata$nyt_titles
+
+# Or read in the data manually
+
+nyt_titles <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-10/nyt_titles.tsv')
+nyt_full <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-10/nyt_full.tsv')
+```
+
+```{r}
+library(dplyr)
+
+#Combine the two dataframes
+result <- nyt_full %>%
+  left_join(select(nyt_titles,-year,-author,-title), by = c("title_id" = "id"))
+
+# Filter rows with years from 2000 to 2020
+filtered_data <- result %>%
+  filter(year >= 2000&year<=2020)
+
+```
