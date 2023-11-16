@@ -160,5 +160,60 @@ ggplot(authors_total_weeks, aes(x = author, y = total_weeks)) +
 
 ```{r}
 
+library(ggplot2)
+
+# Jitter plot with color representing years and separate plots for each year
+ggplot(final_data, aes(x = debut_rank, y = total_weeks, color = as.factor(year))) +
+  geom_jitter(alpha = 0.7) +
+  labs(title = "Jitter Plot: Debut Rank vs Total Weeks on the List",
+       x = "Debut Rank",
+       y = "Total Weeks on the List",
+       color = "Year") +
+  theme_minimal() +
+  facet_wrap(~ year, scales = "free")
+
+```
+
+```{r}
+library(wordcloud)
+# Group by author and count the occurrences
+author_appearances <- final_data %>%
+  group_by(author) %>%
+  summarise(appearances = n())
+
+# Get the top ten authors with the highest number of appearances
+top_ten_authors <- author_appearances %>%
+  top_n(10, appearances)
+
+# Create a color palette for each author
+author_colors <- rainbow(length(top_ten_authors$author))
+
+# Word Cloud with Different Colors for Each Author
+wordcloud(words = top_ten_authors$author, freq = top_ten_authors$appearances, scale = c(3, 0.5), colors = author_colors)
+
+```
+
+```{r}
+##Comparing the debut ranks for the top ten authors based on the appearences in the list
+ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author, y = debut_rank, fill = author)) +
+  geom_boxplot() +
+  labs(title = "Box Plot: Debut Ranks for Top Ten Authors",
+       x = "Author",
+       y = "Debut Rank",
+       fill = "Author") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+##Best rank distribution for the top ten authors based on the appearences in the list
+ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author, y = best_rank, color = author)) +
+  geom_jitter(alpha = 0.7) +
+  labs(title = "Jitter Plot: Best Rank Distribution for Top Ten Authors",
+       x = "Author",
+       y = "Best Rank",
+       color = "Author") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
