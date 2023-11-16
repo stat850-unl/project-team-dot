@@ -44,13 +44,13 @@ filtered_final <- filtered_final %>%
 
 ```
 
-```{}
+```         
 ```
 
 ```         
 ```
 
-```{}
+```         
 ```
 
 ```{r}
@@ -61,7 +61,7 @@ final_data <- filtered_final %>%
 
 ```
 
-```{}
+```         
 ```
 
 ```{r}
