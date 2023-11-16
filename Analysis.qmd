@@ -1,0 +1,164 @@
+---
+title: "Analysis"
+format: html
+editor: visual
+---
+
+```{r}
+# Get the Data
+
+tuesdata <- tidytuesdayR::tt_load('2022-05-10')
+tuesdata <- tidytuesdayR::tt_load(2022, week = 19)
+
+nyt_titles <- tuesdata$nyt_titles
+
+# Or read in the data manually
+
+nyt_titles <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-10/nyt_titles.tsv')
+nyt_full <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-10/nyt_full.tsv')
+```
+
+```{r}
+library(dplyr)
+
+#Combine the two dataframes
+result <- nyt_full %>%
+  left_join(select(nyt_titles,-year,-author,-title), by = c("title_id" = "id"))
+
+# Filter rows with years from 2000 to 2020
+filtered_data <- result %>%
+  filter(year >= 2000&year<=2020)
+
+```
+
+***G-1: How the best rank differs from the debut rank.***
+
+```{r}
+library(skimr)
+skim(filtered_data)
+
+filtered_final <- filtered_data %>%
+  filter(best_rank <=debut_rank)
+filtered_final <- filtered_final %>%
+  mutate(rank_difference = debut_rank - best_rank)
+
+```
+
+```{}
+```
+
+```         
+```
+
+```{}
+```
+
+```{r}
+
+# Keep only one row per book
+final_data <- filtered_final %>%
+  distinct(title_id, .keep_all=TRUE)
+
+```
+
+```{}
+```
+
+```{r}
+library(dplyr)
+
+# Group by title and summarize to find total weeks for each title, selecting top 10
+weeks_per_title <- final_data %>%
+  group_by(title_id, title) %>%
+  summarise(total_weeks = sum(total_weeks)) %>%
+  arrange(desc(total_weeks)) %>%
+  top_n(10)
+
+# Create a data frame with title_id, title, and total_weeks columns
+selected_data <- data.frame(title_id = weeks_per_title$title_id,
+                            title = weeks_per_title$title,
+                            total_weeks = weeks_per_title$total_weeks)
+top_10_records <- selected_data[1:10, ]
+
+
+```
+
+```{r}
+library(ggplot2)
+
+# Reorder 'title' by 'total_weeks' in descending order
+top_10_records$title <- factor(top_10_records$title, levels = top_10_records$title[order(-top_10_records$total_weeks)])
+
+# Plotting a bar graph for the top 10 records based on total_weeks in descending order
+ggplot(top_10_records, aes(x = title, y = total_weeks)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(x = "Title", y = "Total Weeks", title = "Top 10 books in the bestseller list for the most number of weeks") +
+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+```
+
+```{r}
+
+library(ggplot2)
+
+# Reorder 'title' by 'total_weeks' in descending order
+top_10_records$title <- factor(top_10_records$title, levels = top_10_records$title[order(-top_10_records$total_weeks)])
+
+# Create a new column 'label' to assign labels from 1 to 10 for bars on the x-axis
+top_10_records$label <- factor(1:10, labels = 1:10)
+
+# Plotting a bar graph for the top 10 records based on total_weeks in descending order
+plot <- ggplot(top_10_records, aes(x = label, y = total_weeks, fill = title)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Books", y = "Total Weeks", title = "Top 10 books in the bestseller list for the most number of weeks") +
+  theme(axis.text.x = element_text(angle = 360, vjust = 0.5, hjust = 1))
+
+# Adding a legend for titles
+plot + guides(fill = guide_legend(title = "Books"))
+
+
+
+
+```
+
+```{r}
+
+```
+
+```{r}
+# For authors
+
+
+
+# Extract titles from the top 10 records
+top_10_titles <- top_10_records$title
+
+# Filter 'book_data' for authors related to the top 10 titles and aggregate total_weeks for each author
+authors_total_weeks <- final_data %>%
+  filter(title %in% top_10_titles) %>%
+  group_by(author) %>%
+  summarise(total_weeks = sum(total_weeks))
+
+
+```
+
+```{r}
+library(ggplot2)
+
+
+# Reorder 'author' by 'total_weeks' in descending order
+authors_total_weeks$author <- factor(authors_total_weeks$author, 
+                                     levels = authors_total_weeks$author[order(-authors_total_weeks$total_weeks)])
+
+# Plotting a bar graph for authors and their aggregated total_weeks in descending order
+ggplot(authors_total_weeks, aes(x = author, y = total_weeks)) +
+  geom_bar(stat = "identity", fill = "maroon") +
+  labs(x = "Author", y = "Total Weeks", title = "Top 10 authors in the bestseller list for the most number of weeks") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+```
+
+```{r}
+
+
+```
