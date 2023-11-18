@@ -128,8 +128,6 @@ plot + guides(fill = guide_legend(title = "Books"))
 ```{r}
 # For authors
 
-
-
 # Extract titles from the top 10 records
 top_10_titles <- top_10_records$title
 
@@ -217,3 +215,135 @@ ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+```{r}
+library(ggplot2)
+
+
+# Calculate the average total_weeks per year
+average_weeks_per_year <- filtered_final %>%
+  group_by(year) %>%
+  summarise(average_total_weeks = mean(total_weeks, na.rm = TRUE))
+
+# Create a line plot
+ggplot(average_weeks_per_year, aes(x = year, y = average_total_weeks, group = 1)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "black", size = 3) +
+  labs(title = "Average Total Weeks on Best Seller List per Year",
+       x = "Year",
+       y = "Average Total Weeks") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+```{r}
+ggplot(filtered_final, aes(x = debut_rank)) +
+  geom_density(fill = "lightcoral", alpha = 0.5) +
+  geom_vline(aes(xintercept = mean(debut_rank)), color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "Distribution of Debut Rank",
+       x = "Debut Rank",
+       y = "Density") +
+  theme_minimal() +
+  scale_x_continuous(breaks = seq(0, max(filtered_final$debut_rank), by = 2))
+
+```
+```{r}
+max_weeks <- max(filtered_final$total_weeks, na.rm = TRUE)
+ggplot(filtered_final, aes(x = total_weeks)) +
+  geom_density(fill = "red", alpha = 0.5) +
+  geom_vline(aes(xintercept = mean(total_weeks)), color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "Distribution of Total Weeks on Best Seller List",
+       x = "Total Weeks",
+       y = "Density") +
+  theme_minimal() +
+  scale_x_continuous(breaks = seq(0, max_weeks, by = 10))
+
+
+```
+
+```{r}
+# Calculate the correlation between Total Weeks and Debut Rank
+correlation_value <- cor(filtered_final$total_weeks, filtered_final$debut_rank)
+
+# Print the correlation value
+cat("Correlation between Total Weeks and Debut Rank:", correlation_value, "\n")
+
+```
+
+```{r}
+library(ggplot2)
+
+# Calculate the correlation between Debut Rank and Total Weeks
+correlation_value <- cor(filtered_final$debut_rank, filtered_final$total_weeks)
+
+# Print the correlation value
+cat("Correlation between Debut Rank and Total Weeks:", correlation_value, "\n")
+
+# Plot a scatter plot
+ggplot(filtered_final, aes(x = debut_rank, y = total_weeks)) +
+  geom_point(color = "skyblue", size = 3) +
+  labs(title = "Relationship Between Debut Rank and Total Weeks",
+       x = "Debut Rank",
+       y = "Total Weeks on List") +
+  theme_minimal()
+
+```
+comment:
+Correlation between Total Weeks and Debut Rank: -0.08535088 which is very week and negatively correlated. So we can make decision that books which debut at a higher rank doesn't necessarily tend to stay on the list longer. Actually no relation between debut rank and total weeks
+
+```{r}
+
+# Fit a linear regression model
+regression_model <- lm(best_rank ~ total_weeks + debut_rank, data = filtered_final)
+
+# Print the summary of the regression model
+summary(regression_model)
+
+```
+comment:
+Overall, the model seems to suggest that both total_weeks and debut_rank are significant predictors of best_rank. However, it's important to note that the low R-squared value indicates that there is still a large amount of unexplained variance, and the relationship between the predictors (total_weeks and debut_rank) and best_rank may not be entirely captured by the linear model.
+```{r}
+# Load the 'car' package for VIF calculation
+library(car)
+
+# Fit a linear regression model
+model <- lm(best_rank ~ total_weeks + debut_rank, data = filtered_final)
+
+# Calculate VIF
+vif_values <- car::vif(model)
+
+# Print the VIF values
+print(vif_values)
+
+```
+comment: As both VIF value<5, there is no multicollinearity.
+```{r}
+# Extract coefficients and standard errors
+coefficients <- coef(regression_model)
+se <- summary(regression_model)$coefficients[, "Std. Error"]
+
+# Create a data frame for plotting
+bar_data <- data.frame(
+  Coefficient = names(coefficients),
+  Estimate = coefficients,
+  Std.Error = se
+)
+
+# Plot
+library(ggplot2)
+ggplot(bar_data, aes(x = Coefficient, y = Estimate, ymin = Estimate - 1.96 * Std.Error, ymax = Estimate + 1.96 * Std.Error)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "skyblue", color = "black") +
+  geom_errorbar(width = 0.2, position = position_dodge(0.9)) +
+  labs(title = "Coefficient Plot",
+       y = "Estimate",
+       x = "Coefficient") +
+  theme_minimal()
+
+
+```
+
+
+
+
+
+
