@@ -65,49 +65,26 @@ final_data <- filtered_final %>%
 ```
 
 ```{r}
+
 library(dplyr)
 
-# Group by title and summarize to find total weeks for each title, selecting top 10
-weeks_per_title <- final_data %>%
-  group_by(title_id, title) %>%
-  summarise(total_weeks = sum(total_weeks)) %>%
+#getting the top 10 tiltles by arranging the total weeks in descending order
+top_10_records <- final_data %>%
   arrange(desc(total_weeks)) %>%
-  top_n(10)
-
-# Create a data frame with title_id, title, and total_weeks columns
-selected_data <- data.frame(title_id = weeks_per_title$title_id,
-                            title = weeks_per_title$title,
-                            total_weeks = weeks_per_title$total_weeks)
-top_10_records <- selected_data[1:10, ]
+  slice(1:10) %>%
+  select(title_id, title, total_weeks)
 
 
 ```
 
 ```{r}
-library(ggplot2)
-
-# Reorder 'title' by 'total_weeks' in descending order
-top_10_records$title <- factor(top_10_records$title, levels = top_10_records$title[order(-top_10_records$total_weeks)])
-
-# Plotting a bar graph for the top 10 records based on total_weeks in descending order
-ggplot(top_10_records, aes(x = title, y = total_weeks)) +
-  geom_bar(stat = "identity", fill = "blue") +
-  labs(x = "Title", y = "Total Weeks", title = "Top 10 books in the bestseller list for the most number of weeks") +
- theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-
-```
-
-```{r}
-
-library(ggplot2)
-
 # Reorder 'title' by 'total_weeks' in descending order
 top_10_records$title <- factor(top_10_records$title, levels = top_10_records$title[order(-top_10_records$total_weeks)])
 
 # Create a new column 'label' to assign labels from 1 to 10 for bars on the x-axis
 top_10_records$label <- factor(1:10, labels = 1:10)
 
-# Plotting a bar graph for the top 10 records based on total_weeks in descending order
+# Plotting the bar graph
 plot <- ggplot(top_10_records, aes(x = label, y = total_weeks, fill = title)) +
   geom_bar(stat = "identity") +
   labs(x = "Books", y = "Total Weeks", title = "Top 10 books in the bestseller list for the most number of weeks") +
@@ -115,14 +92,6 @@ plot <- ggplot(top_10_records, aes(x = label, y = total_weeks, fill = title)) +
 
 # Adding a legend for titles
 plot + guides(fill = guide_legend(title = "Books"))
-
-
-
-
-```
-
-```{r}
-
 ```
 
 ```{r}
@@ -131,28 +100,91 @@ plot + guides(fill = guide_legend(title = "Books"))
 # Extract titles from the top 10 records
 top_10_titles <- top_10_records$title
 
-# Filter 'book_data' for authors related to the top 10 titles and aggregate total_weeks for each author
+# Filter 'final_data' for the top 10 titles and select specific columns, arranging in descending order of total_weeks
 authors_total_weeks <- final_data %>%
   filter(title %in% top_10_titles) %>%
-  group_by(author) %>%
-  summarise(total_weeks = sum(total_weeks))
+  select(title_id, title, author, total_weeks) %>%
+  arrange(desc(total_weeks))
+
+
+
+```
+
+```{}
+```
+
+```{r}
+# Reorder 'author' by 'total_weeks' in descending order
+authors_total_weeks$author <- factor(authors_total_weeks$author, 
+                                     levels = authors_total_weeks$author[order(-authors_total_weeks$total_weeks)])
+
+# Plotting a bar graph for authors 
+ggplot(authors_total_weeks, aes(x = author, y = total_weeks)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(x = "Author", y = "Total Weeks", title = "Top 10 authors in the bestseller list for the most number of weeks") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+
+```
+
+```{r}
+
+library(dplyr)
+
+# Group data by 'year' and find the book with the highest total_weeks for each year
+highest_total_weeks_per_year <- final_data %>%
+  group_by(year) %>%
+  slice(which.max(total_weeks)) %>%
+  ungroup()
+
+# Create a dataframe with the required columns
+weeks_per_year <- highest_total_weeks_per_year %>%
+  select(year, title_id, title, author, total_weeks)
 
 
 ```
 
 ```{r}
 library(ggplot2)
+library(gridExtra)
 
+# Plot 1: Line graph for year and total weeks
+plot1 <- ggplot(weeks_per_year, aes(x = year, y = total_weeks)) +
+  geom_line(aes(color = "Total Weeks"), size = 1.5, show.legend = FALSE) +
+  labs(
+    title = "Highest number of weeks a book appeared in each year", 
+    x = "Year",
+    y = "Total Weeks"
+  ) +
+  scale_x_continuous(breaks = seq(min(weeks_per_year$year), max(weeks_per_year$year), by = 2)) +
+  scale_color_manual(values = c("Total Weeks" = "maroon")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-# Reorder 'author' by 'total_weeks' in descending order
-authors_total_weeks$author <- factor(authors_total_weeks$author, 
-                                     levels = authors_total_weeks$author[order(-authors_total_weeks$total_weeks)])
+# Plot 2: Displaying year along with top book titles
+plot2 <- ggplot() +
+  geom_blank() +
+  labs() +  
+  theme_void()
 
-# Plotting a bar graph for authors and their aggregated total_weeks in descending order
-ggplot(authors_total_weeks, aes(x = author, y = total_weeks)) +
-  geom_bar(stat = "identity", fill = "maroon") +
-  labs(x = "Author", y = "Total Weeks", title = "Top 10 authors in the bestseller list for the most number of weeks") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+# Create text to display year and top book titles
+for (i in 1:nrow(weeks_per_year)) {
+  plot2 <- plot2 +
+    annotate(
+      "text",
+      x = 0.5, y = 1 - (i - 1) * 0.05,
+      label = paste(weeks_per_year$year[i], "-", weeks_per_year$title[i]),
+      size = 2  
+    )
+}
+
+# Arrange plots side by side in a single row with a separator line
+grid.arrange(
+  plot1, plot2,
+  ncol = 2, widths = c(0.7, 0.3),
+  layout_matrix = rbind(c(1, 2), c(1, 2)), heights = c(1, 0.01)
+)
+
 
 ```
 
@@ -215,6 +247,7 @@ ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+
 ```{r}
 library(ggplot2)
 
@@ -247,6 +280,7 @@ ggplot(filtered_final, aes(x = debut_rank)) +
   scale_x_continuous(breaks = seq(0, max(filtered_final$debut_rank), by = 2))
 
 ```
+
 ```{r}
 max_weeks <- max(filtered_final$total_weeks, na.rm = TRUE)
 ggplot(filtered_final, aes(x = total_weeks)) +
@@ -288,8 +322,8 @@ ggplot(filtered_final, aes(x = debut_rank, y = total_weeks)) +
   theme_minimal()
 
 ```
-comment:
-Correlation between Total Weeks and Debut Rank: -0.08535088 which is very week and negatively correlated. So we can make decision that books which debut at a higher rank doesn't necessarily tend to stay on the list longer. Actually no relation between debut rank and total weeks
+
+comment: Correlation between Total Weeks and Debut Rank: -0.08535088 which is very week and negatively correlated. So we can make decision that books which debut at a higher rank doesn't necessarily tend to stay on the list longer. Actually no relation between debut rank and total weeks
 
 ```{r}
 
@@ -300,8 +334,9 @@ regression_model <- lm(best_rank ~ total_weeks + debut_rank, data = filtered_fin
 summary(regression_model)
 
 ```
-comment:
-Overall, the model seems to suggest that both total_weeks and debut_rank are significant predictors of best_rank. However, it's important to note that the low R-squared value indicates that there is still a large amount of unexplained variance, and the relationship between the predictors (total_weeks and debut_rank) and best_rank may not be entirely captured by the linear model.
+
+comment: Overall, the model seems to suggest that both total_weeks and debut_rank are significant predictors of best_rank. However, it's important to note that the low R-squared value indicates that there is still a large amount of unexplained variance, and the relationship between the predictors (total_weeks and debut_rank) and best_rank may not be entirely captured by the linear model.
+
 ```{r}
 # Load the 'car' package for VIF calculation
 library(car)
@@ -316,7 +351,9 @@ vif_values <- car::vif(model)
 print(vif_values)
 
 ```
-comment: As both VIF value<5, there is no multicollinearity.
+
+comment: As both VIF value\<5, there is no multicollinearity.
+
 ```{r}
 # Extract coefficients and standard errors
 coefficients <- coef(regression_model)
@@ -341,9 +378,3 @@ ggplot(bar_data, aes(x = Coefficient, y = Estimate, ymin = Estimate - 1.96 * Std
 
 
 ```
-
-
-
-
-
-
