@@ -158,6 +158,7 @@ plot1 <- ggplot(weeks_per_year, aes(x = year, y = total_weeks)) +
   ) +
   scale_x_continuous(breaks = seq(min(weeks_per_year$year), max(weeks_per_year$year), by = 2)) +
   scale_color_manual(values = c("Total Weeks" = "maroon")) +
+  geom_point(color = "black", size = 3) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
