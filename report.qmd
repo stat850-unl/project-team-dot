@@ -120,6 +120,29 @@ filtered_data <- result %>%
 
 ```
 
+
+> We created a new variable and added a new column called rank_difference by subtracting the best_rank from debut_rank. This is because there were some records where there were some errors in these two columns, therefore we only kept the rows where the best rank was a value less than or equal to the debut rank.  We used the `filter` function from [@dplyr-package] `dplyr` package to do this.
+>We used this dataset (filtered_final) to do some of our analysis. Since we wanted to check the correlation and fit a regression model we used this filtered dataset to explore our objectives. 
+
+```{r}
+#| echo: false
+
+#keeping only the records where the best rank is less than or equal to debut rank
+filtered_final <- filtered_data %>%
+  filter(best_rank <=debut_rank)
+
+#creating the new column rank_difference
+filtered_final <- filtered_final %>%
+  mutate(rank_difference = debut_rank - best_rank)
+
+
+
+```
+
+
+
+
+
 ## Topic of Exploration
 
 Here, you want to introduce the first topic you want to explore with your (newly cleaned up) data. Code to process data should be contained in chunks above this point, and those chunks should *not* be included in the report.
