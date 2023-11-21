@@ -135,7 +135,7 @@ filtered_final <- filtered_final %>%
 
 ```
 
->There were many records for one book title and due to that we were not able to obtain meaningful results and clear visual representations. Another topic we wanted to explore was comparing the variables best_rank, debut_rank and total_weeks. But these variables do not depend on the week the book appeared on the list, it only depends on the title id of the book. Therefore to get a more clear idea we filtered the dataset by keeping only the distinct title ids and carried out the rest of the analysis using this dataset.We used the `filter` function from [@dplyr-package] `dplyr` package to do this.Our filtered_final dataset contains 13164 observations and 11 variables. And the dataset we obtained after getting only the unique title id’s had 2276 observations and 11 variables.
+> There were many records for one book title and due to that we were not able to obtain meaningful results and clear visual representations. Another topic we wanted to explore was comparing the variables best_rank, debut_rank and total_weeks. But these variables do not depend on the week the book appeared on the list, it only depends on the title id of the book. Therefore to get a more clear idea we filtered the dataset by keeping only the distinct title ids and carried out the rest of the analysis using this dataset.We used the `filter` function from [@dplyr-package] `dplyr` package to do this.Our filtered_final dataset contains 13164 observations and 11 variables. And the dataset we obtained after getting only the unique title id's had 2276 observations and 11 variables.
 
 ```{r}
 #| echo: false
@@ -146,37 +146,178 @@ final_data <- filtered_final %>%
 
 ```
 
-## Topic of Exploration
+## Line plot of the average total_weeks per year
 
-Here, you want to introduce the first topic you want to explore with your (newly cleaned up) data. Code to process data should be contained in chunks above this point, and those chunks should *not* be included in the report.
 
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
-
-If you generate a figure, it should have a caption. Here's a demonstration of how to do that:
-
-```{r iris-plot}
-#| label: fig-iris
+```{r fig-1}
+#| label: Avg_Total_Weeks_per_year
 #| fig-width: 8
 #| fig-height: 4 # Change the figure dimensions using fig-width/height
 #| out-width: 80% # This changes the size of the figure as rendered in the text. 
-#| fig-cap: "This figure shows the relationship between sepal width and petal width in irises. I've used geom_jitter to combat overplotting, as the data are measured in relatively consistent increments. The figure is drawn with `ggplot2` [@ggplot2-package]."
+#| fig-cap: "This figure shows the relationship between Average Total Weeks on Best Seller List per Year. I've used geom_line to create line plot and geom_point to show the exact point on the corresponding year. as the data are measured in relatively consistent increments. The figure is drawn with `ggplot2` [@ggplot2-package]."
 #| echo: false
 
 
-data(iris)
+# Calculate the average total_weeks per year
+average_weeks_per_year <- filtered_final %>%
+  group_by(year) %>%
+  summarise(average_total_weeks = mean(total_weeks, na.rm = TRUE))
 library(ggplot2)
-ggplot(iris, aes(x = Sepal.Width, y = Petal.Width, color = Species)) + 
-  geom_jitter() + 
-  xlab("Sepal Width (cm)") + ylab("Petal Width (cm)") + 
-  ggtitle("Sepal and Petal Dimensions")
+
+# Create a line plot
+ggplot(average_weeks_per_year, aes(x = year, y = average_total_weeks, group = 1)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "black", size = 3) +
+  labs(title = "Average Total Weeks on Best Seller List per Year",
+       x = "Year",
+       y = "Average Total Weeks") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
+***Topic:*** We tried to see on average which year has most of the Total Weeks on the Best Seller List. The @Avg_Total_Weeks_per_year line plot shows that the average total weeks was highest in 2004 and lowest in 2007 although the average was the same for 2011 and 2012. The number of average total weeks mostly increased by approximately 56% from 2002 to 2003 and decreased by 41% from 2005 to 2006.
+The `echo: false` option disables the printing of code (only output is displayed).
+
+### Debut Rank Distribution
+```{r fig-2}
+#| label: Distribution_of_Debut_Rank
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: "This figure shows the Distribution_of_Debut_Rank on bestseller list in fig-2. I've used geom_density to show the distribution and geomv_line to indicate the mean value in this plot. The figure is drawn with `ggplot2` [@ggplot2-package]."
+#| echo: false
+
+summary(filtered_final$debut_rank)
+summary(filtered_final$total_weeks)
+
+# Distribution of debut_rank
+ggplot(filtered_final, aes(x = debut_rank)) +
+  geom_density(fill = "lightcoral", alpha = 0.5) +
+  geom_vline(aes(xintercept = mean(debut_rank)), color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "Distribution of Debut Rank",
+       x = "Debut Rank",
+       y = "Density") +
+  theme_minimal() +
+  scale_x_continuous(breaks = seq(0, max(filtered_final$debut_rank), by = 2))
+
+```
+### Total week distribution plot
+```{r fig-3}
+#| label: Total_Weeks
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: "This figure shows the Distribution of Total Weeks on Best Seller List in fig-3. I've used geom_density to show the distribution and geomv_line to indicate the mean value in this plot. The figure is drawn with `ggplot2` [@ggplot2-package]."
+#| echo: false
+
+#Distribution of Total Weeks on Best Seller List
+max_weeks <- max(filtered_final$total_weeks, na.rm = TRUE)
+ggplot(filtered_final, aes(x = total_weeks)) +
+  geom_density(fill = "red", alpha = 0.5) +
+  geom_vline(aes(xintercept = mean(total_weeks)), color = "blue", linetype = "dashed", size = 1) +
+  labs(title = "Distribution of Total Weeks on Best Seller List",
+       x = "Total Weeks",
+       y = "Density") +
+  theme_minimal() +
+  scale_x_continuous(breaks = seq(0, max_weeks, by = 10))
+
+
+```
+
+***Distribution of some variables:***
+
+Here we have shown @Distribution_of_Debut_Rank and @Total_Weeks on the Best seller list. For debut rank, the mean and median value is very close 9.184 and 9 respectively but this deviated a lot for total weeks which is 18.75 and 8 respectively. This result was reflected perfectly in both distribution plots.
+
+From the plot, we can see Debut Rank distribution graph is approx bell shape but the Total Weeks graph has a long tail on the right or we can say it right skewed. In the total weeks density graph, we have also observed some outliers data which are approx 100 to 170 weeks. That means very few books actually stayed on the list for 100 to 170 weeks whereas most of the books stayed around 8 to 20 weeks.
+
+### Correlation Between Debut Rank and Total Weeks 
+```{r fig-4}
+#| label: Correlation_Between_Debut_Rank_and_Total_Weeks
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: "This figure shows the relationship between Debut Rank and Total Weeks in fig-4. I've used geom_point to show that total weeks point with corresponding debut rank. The figure is drawn with `ggplot2` [@ggplot2-package]."
+#| echo: false
+
+# Calculate the correlation between Total Weeks and Debut Rank
+correlation_value <- cor(filtered_final$total_weeks, filtered_final$debut_rank)
+
+# Print the correlation value
+cat("Correlation between Total Weeks and Debut Rank:", correlation_value, "\n")
+
+library(ggplot2)
+
+# Calculate the correlation between Debut Rank and Total Weeks
+correlation_value <- cor(filtered_final$debut_rank, filtered_final$total_weeks)
+
+# Print the correlation value
+cat("Correlation between Debut Rank and Total Weeks:", correlation_value, "\n")
+
+# Plot a scatter plot
+ggplot(filtered_final, aes(x = debut_rank, y = total_weeks)) +
+  geom_point(color = "skyblue", size = 3) +
+  labs(title = "Relationship Between Debut Rank and Total Weeks",
+       x = "Debut Rank",
+       y = "Total Weeks on List") +
+  theme_minimal()
+```
+Correlation: @Correlation_Between_Debut_Rank_and_Total_Weeks is: -0.08535088 which is very weak and negatively correlated. So we can make the decision that books that debut at a higher rank don't necessarily tend to stay on the list longer. Actually no relation between debut rank and total weeks
+
+### Regression analysis and Coefficient box Plot
+```{r fig-5 }
+#| label: Coefficient_box_Plot
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: "This figure shows the coeffecient box plot from the regression model in fig-5. I've used geom_bar and geom_error bar. The figure is drawn with `ggplot2` [@ggplot2-package]."
+#| echo: false
+
+# Fit a linear regression model
+regression_model <- lm(best_rank ~ total_weeks + debut_rank, data = filtered_final)
+
+# Print the summary of the regression model
+summary(regression_model)
+
+library(car)
+
+# Fit a linear regression model
+model <- lm(best_rank ~ total_weeks + debut_rank, data = filtered_final)
+
+# Calculate VIF
+vif_values <- car::vif(model)
+
+# Print the VIF values
+print(vif_values)
+
+# Extract coefficients and standard errors
+coefficients <- coef(regression_model)
+se <- summary(regression_model)$coefficients[, "Std. Error"]
+
+# Create a data frame for plotting
+bar_data <- data.frame(
+  Coefficient = names(coefficients),
+  Estimate = coefficients,
+  Std.Error = se
+)
+
+# Plot
+library(ggplot2)
+ggplot(bar_data, aes(x = Coefficient, y = Estimate, ymin = Estimate - 1.96 * Std.Error, ymax = Estimate + 1.96 * Std.Error)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "skyblue", color = "black") +
+  geom_errorbar(width = 0.2, position = position_dodge(0.9)) +
+  labs(title = "Coefficient Plot",
+       y = "Estimate",
+       x = "Coefficient") +
+  theme_minimal()
+
+```
+***Regression:***
+Overall, the model seems to suggest that both total_weeks and debut_rank are significant predictors of best_rank. However, it's important to note that the low R-squared value indicates that there is still a large amount of unexplained variance, and the relationship between the predictors (total_weeks and debut_rank) and best_rank may be partially captured by the linear model.
+
+By analyzing this regression model, we have found that to secure the best rank on the New York Times best-seller list, staying on that list for more weeks has a significant impact, and also same effect goes for debut rank as well. 
+
+**Checking Multicollinearity:**
+As both VIF value <5, there is no multicollinearity on the predictor variable (total week and debut rank)
 
 Then, you can reference @fig-iris in the text and the appropriate cross-reference will be generated.
 
@@ -184,7 +325,12 @@ You can find additional information about formatting figures generated from code
 
 ## Additional Exploration topic
 
+##Shiny App:
+We have created a shiny graph to search the book according to the author. If anyone is interested to know the name of the author of any particular book, he/she will find this easily. This makes easy for anyone to search the author and see which books that particular author wrote.
+
+
 Add another topic here... as many as you desire, really. Make sure to include a transition between the two sections that connects the two with some sort of logical train of thought.
+
 
 ## Conclusion
 
