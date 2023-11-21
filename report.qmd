@@ -19,20 +19,34 @@ if (!"remotes" %in% installed.packages()) {
 }
 
 # This is how to do it for a package that's only on github
-if (!"emo" %in% installed.packages()) {
-  remotes::install_github("hadley/emo")
-
-```
-
-```{r}
+#if (!"emo" %in% installed.packages()) {
+ # remotes::install_github("hadley/emo")
 
 ```
 
 ## Introduction
 
-Introduce your dataset and basic questions for exploration. Explain any unique approaches you will take or any interesting features of your dataset that you have to overcome. Cite the source of your dataset, and briefly discuss how it was collected.
+This dataset contains information about the fiction bestseller list of **The New York Times** between the years **1931 to 2020**. This dataset includes the title, author(s), publication date, rank, and other information for every work recorded since the list's founding in 1931.
 
-Discuss the variables in the dataset and if there are anomalies in the variables, provide some visual assessment of the anomalies and explain how they may have arisen. You should cover most of the information in your proposal data section, but should primarily use paragraphs and not lists/tables (the exception may be a list of e.g. items which were measured).
+Every row in the dataset represents a single "entry"---a single slot for a particular week---on the list. There are usually ten or fifteen works listed each week. But the number of bestsellers the Times features in a given week varies, so there may be 3, 6, 7, 8, or 16.
+
+It was collected from the **Tidy Tuesday Archive**. The source link is- https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-05-10/readme.md#nyt_titlestsv
+
+There are 8 variables in nyt_titles and 6 variables in nyt_full. Here is a data dictionary showing each variable, the type of variable, units, and range of values that are possible:
+
+nyt_full.tsv:
+
+-    year - the year of appearance 
+
+-   week - the weekly issue of the bestseller list 
+
+-   rank - the book's rank on the list for that week 
+
+-   title_id - a unique ID mapping titles to the nyt_titles spreadsheet 
+
+-   title - title of the novel, as reported by the New York Times 
+
+-   author - author of the novel, as reported by the New York Times
 
 ## Methods
 
