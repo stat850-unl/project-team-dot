@@ -13,7 +13,7 @@ library(readr)
 library(ggplot2)
 library(viridis)
 
-# Assuming filtered_final is available
+
 data_shiny <- filtered_final
 
 # Define UI for the Shiny app
@@ -46,16 +46,15 @@ server <- function(input, output) {
     # Create a bar chart using ggplot2 with viridis color palette
     ggplot(data = as.data.frame(counts), aes(x = Var1, y = Freq, fill = Var1)) +
       geom_bar(stat = "identity", color = "white") +
-      labs(title = "Bar Plot of Books by Author", x = "Book Name", y = "Frequency") +
+      labs(title = "Bar Plot of Books by Author", x = "Book Name", y = "Rank") +
       theme_minimal() +
       theme(axis.text.x = element_text(angle = 25, hjust = 1),
             plot.title = element_text(face = "bold", size = 16)) +
-      scale_fill_viridis(discrete = TRUE) +  # Use viridis color palette
+      scale_fill_viridis_d() +
       guides(fill = guide_legend(title = "Author"))
   })
 }
 
-
-
 # Run the application
 shinyApp(ui = ui, server = server)
+
