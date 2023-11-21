@@ -120,9 +120,7 @@ filtered_data <- result %>%
 
 ```
 
-
-> We created a new variable and added a new column called rank_difference by subtracting the best_rank from debut_rank. This is because there were some records where there were some errors in these two columns, therefore we only kept the rows where the best rank was a value less than or equal to the debut rank.  We used the `filter` function from [@dplyr-package] `dplyr` package to do this.
->We used this dataset (filtered_final) to do some of our analysis. Since we wanted to check the correlation and fit a regression model we used this filtered dataset to explore our objectives. 
+> We created a new variable and added a new column called rank_difference by subtracting the best_rank from debut_rank. This is because there were some records where there were some errors in these two columns, therefore we only kept the rows where the best rank was a value less than or equal to the debut rank. We used the `filter` function from [@dplyr-package] `dplyr` package to do this. We used this dataset (filtered_final) to do some of our analysis. Since we wanted to check the correlation and fit a regression model we used this filtered dataset to explore our objectives.
 
 ```{r}
 #| echo: false
@@ -135,13 +133,18 @@ filtered_final <- filtered_data %>%
 filtered_final <- filtered_final %>%
   mutate(rank_difference = debut_rank - best_rank)
 
-
-
 ```
 
+>There were many records for one book title and due to that we were not able to obtain meaningful results and clear visual representations. Another topic we wanted to explore was comparing the variables best_rank, debut_rank and total_weeks. But these variables do not depend on the week the book appeared on the list, it only depends on the title id of the book. Therefore to get a more clear idea we filtered the dataset by keeping only the distinct title ids and carried out the rest of the analysis using this dataset.We used the `filter` function from [@dplyr-package] `dplyr` package to do this.Our filtered_final dataset contains 13164 observations and 11 variables. And the dataset we obtained after getting only the unique title id’s had 2276 observations and 11 variables.
 
+```{r}
+#| echo: false
 
+# Keep only one row per book
+final_data <- filtered_final %>%
+  distinct(title_id, .keep_all=TRUE)
 
+```
 
 ## Topic of Exploration
 
