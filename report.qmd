@@ -70,11 +70,55 @@ The above dataset will be used to explore different topics that will help book l
 
 We have two variables in our dataset which are the debut rank and best rank , but there were some anomalies where the best rank for some books was a value greater than the debut rank , maybe this was due to some incorrect data entries so we removed those records as a data cleaning process.
 
+**Objectives of this whole analysis:**
+
+-   Average Total Weeks on Bestseller List per Year
+
+-   Distribution of variables (total_weeks, debut_rank)
+
+-   Top 10 books and authors in the bestseller list for the most number of weeks
+
+-   Highest number of weeks a book appeared in the list in each year 
+
+-   Relationship between the Debut Rank of a book and the Total Number of weeks in the list
+
+-   Top 10 authors in the list based on the number of appearances over the years
+
+-   Debut rank distribution for the top 10 authors in the list based on the number of appearances over the years
+
+-   Best rank distribution for the top 10 authors in the list based on the number of appearances over the years
+
+-   Checking significant relationships of best_rank variable with total_weeks and debut_rank 
+
 ## Methods
 
-Describe any data cleaning and rearranging you needed to do to get your dataset into a workable form. Make sure to cite any packages which were important in your data cleaning process in this section. For instance, if you used dplyr, then it would be appropriate to say something like
+> As there are 2 datasets, nyt_titles and nyt_full we combined the 2 datasets and obtained a single dataframe. We used the `left_join` function from [@dplyr-package] `dplyr` package and combined 2 datasets using the title_id. As we are only interested in bestseller books from 2000 to 2020, we filtered the records from 2000 to 2020 from the combined dataset using the `filter` function.
 
-> we used the group-apply-combine paradigm with the `dplyr` functions `group_by` and `summarize` [@dplyr-package] to generate a dataset for each day of the observation period from the 15-minute interval observations in the raw data set.
+```{r}
+#| echo: false
+# Get the Data
+
+tuesdata <- tidytuesdayR::tt_load('2022-05-10')
+tuesdata <- tidytuesdayR::tt_load(2022, week = 19)
+
+nyt_titles <- tuesdata$nyt_titles
+
+# Or read in the data manually
+
+nyt_titles <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-10/nyt_titles.tsv')
+nyt_full <- readr::read_tsv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-05-10/nyt_full.tsv')
+
+library(dplyr)
+
+#Combine the two dataframes
+result <- nyt_full %>%
+  left_join(select(nyt_titles,-year,-author,-title), by = c("title_id" = "id"))
+
+# Filter rows with years from 2000 to 2020
+filtered_data <- result %>%
+  filter(year >= 2000&year<=2020)
+
+```
 
 ## Topic of Exploration
 
