@@ -148,7 +148,6 @@ final_data <- filtered_final %>%
 
 ## Line plot of the average total_weeks per year
 
-
 ```{r fig-1}
 #| label: Avg_Total_Weeks_per_year
 #| fig-width: 8
@@ -175,10 +174,11 @@ ggplot(average_weeks_per_year, aes(x = year, y = average_total_weeks, group = 1)
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
-***Topic:*** We tried to see on average which year has most of the Total Weeks on the Best Seller List. The @Avg_Total_Weeks_per_year line plot shows that the average total weeks was highest in 2004 and lowest in 2007 although the average was the same for 2011 and 2012. The number of average total weeks mostly increased by approximately 56% from 2002 to 2003 and decreased by 41% from 2005 to 2006.
-The `echo: false` option disables the printing of code (only output is displayed).
+
+***Topic:*** We tried to see on average which year has most of the Total Weeks on the Best Seller List. The @Avg_Total_Weeks_per_year line plot shows that the average total weeks was highest in 2004 and lowest in 2007 although the average was the same for 2011 and 2012. The number of average total weeks mostly increased by approximately 56% from 2002 to 2003 and decreased by 41% from 2005 to 2006. The `echo: false` option disables the printing of code (only output is displayed).
 
 ### Debut Rank Distribution
+
 ```{r fig-2}
 #| label: Distribution_of_Debut_Rank
 #| fig-width: 8
@@ -201,7 +201,9 @@ ggplot(filtered_final, aes(x = debut_rank)) +
   scale_x_continuous(breaks = seq(0, max(filtered_final$debut_rank), by = 2))
 
 ```
+
 ### Total week distribution plot
+
 ```{r fig-3}
 #| label: Total_Weeks
 #| fig-width: 8
@@ -230,7 +232,8 @@ Here we have shown @Distribution_of_Debut_Rank and @Total_Weeks on the Best sell
 
 From the plot, we can see Debut Rank distribution graph is approx bell shape but the Total Weeks graph has a long tail on the right or we can say it right skewed. In the total weeks density graph, we have also observed some outliers data which are approx 100 to 170 weeks. That means very few books actually stayed on the list for 100 to 170 weeks whereas most of the books stayed around 8 to 20 weeks.
 
-### Correlation Between Debut Rank and Total Weeks 
+### Correlation Between Debut Rank and Total Weeks
+
 ```{r fig-4}
 #| label: Correlation_Between_Debut_Rank_and_Total_Weeks
 #| fig-width: 8
@@ -261,9 +264,11 @@ ggplot(filtered_final, aes(x = debut_rank, y = total_weeks)) +
        y = "Total Weeks on List") +
   theme_minimal()
 ```
+
 Correlation: @Correlation_Between_Debut_Rank_and_Total_Weeks is: -0.08535088 which is very weak and negatively correlated. So we can make the decision that books that debut at a higher rank don't necessarily tend to stay on the list longer. Actually no relation between debut rank and total weeks
 
 ### Regression analysis and Coefficient box Plot
+
 ```{r fig-5 }
 #| label: Coefficient_box_Plot
 #| fig-width: 8
@@ -311,26 +316,288 @@ ggplot(bar_data, aes(x = Coefficient, y = Estimate, ymin = Estimate - 1.96 * Std
   theme_minimal()
 
 ```
-***Regression:***
-Overall, the model seems to suggest that both total_weeks and debut_rank are significant predictors of best_rank. However, it's important to note that the low R-squared value indicates that there is still a large amount of unexplained variance, and the relationship between the predictors (total_weeks and debut_rank) and best_rank may be partially captured by the linear model.
 
-By analyzing this regression model, we have found that to secure the best rank on the New York Times best-seller list, staying on that list for more weeks has a significant impact, and also same effect goes for debut rank as well. 
+***Regression:*** Overall, the model seems to suggest that both total_weeks and debut_rank are significant predictors of best_rank. However, it's important to note that the low R-squared value indicates that there is still a large amount of unexplained variance, and the relationship between the predictors (total_weeks and debut_rank) and best_rank may be partially captured by the linear model.
 
-**Checking Multicollinearity:**
-As both VIF value <5, there is no multicollinearity on the predictor variable (total week and debut rank)
+By analyzing this regression model, we have found that to secure the best rank on the New York Times best-seller list, staying on that list for more weeks has a significant impact, and also same effect goes for debut rank as well.
 
-Then, you can reference @fig-iris in the text and the appropriate cross-reference will be generated.
+**Checking Multicollinearity:** As both VIF value \<5, there is no multicollinearity on the predictor variable (total week and debut rank)
+
+Next we wanted to explore the variables best_rank, debut_rank and total_weeks. As these variables do not depend on the week,the book appeared on the list,  we filtered the dataset by keeping only the distinct title ids and carried out the rest of the analysis using this dataset.
+
+### Top **10 books and authors in the bestseller list for the most number of weeks**
+
+```{r fig-6}
+#| label: Top_10_books_for_most_no_of_weeks
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: " This figure shows the top 10 books in the bestseller list for the most number of weeks. We have obtained the top 10 titles by arranging the total weeks in descending order and extracting the top 10 records. This plot was drawn from geom_bar in the 'ggplot2' [@ggplot2-package]. As the titles of the books are too long we have added a legend with the book titles to have a more clear and effective visualization."
+#| echo: false
+
+library(dplyr)
+
+#getting the top 10 tiltles by arranging the total weeks in descending order
+top_10_records <- final_data %>%
+  arrange(desc(total_weeks)) %>%
+  slice(1:10) %>%
+  select(title_id, title, total_weeks)
+
+
+# Reorder 'title' by 'total_weeks' in descending order
+top_10_records$title <- factor(top_10_records$title, levels = top_10_records$title[order(-top_10_records$total_weeks)])
+
+# Create a new column 'label' to assign labels from 1 to 10 for bars on the x-axis
+top_10_records$label <- factor(1:10, labels = 1:10)
+
+# Plotting the bar graph
+plot <- ggplot(top_10_records, aes(x = label, y = total_weeks, fill = title)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Books", y = "Total Weeks", title = "Top 10 books in the bestseller list for the most number of weeks") +
+  theme(axis.text.x = element_text(angle = 360, vjust = 0.5, hjust = 1))
+
+# Adding a legend for titles
+plot + guides(fill = guide_legend(title = "Books"))
+
+```
+
+According to this figure @Top_10_books_for_most_no_of_weeks we can see that the book "Oh, the places you will go!" is the book that appeared in the bestseller list for the most number of weeks. This book appeared in the list for 178 weeks. The book "The Da Vinci Code" is also among the top books having appeared in the list for 165 weeks. The books "Harry Potter and the Sorcerer's stone", "Gone girl" and "The girl who kicked the hornet's nest" were in the bestseller list for almost a similar number of weeks.
+
+```{r fig-7}
+#| label: Top_10_authors_for_most_no_of_weeks
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: " This figure shows the top 10 authors in the bestseller list for the most number of weeks. We have obtained the corresponding author for each top 10 books obtained above. This plot was drawn from geom_bar in the 'ggplot2' [@ggplot2-package]. As the titles of the books are too long we have added a legend with the book titles to have a more clear and effective visualization."
+#| echo: false
+
+# For authors
+
+# Extract titles from the top 10 records
+top_10_titles <- top_10_records$title
+
+# Filter 'final_data' for the top 10 titles and select specific columns, arranging in descending order of total_weeks
+authors_total_weeks <- final_data %>%
+  filter(title %in% top_10_titles) %>%
+  select(title_id, title, author, total_weeks) %>%
+  arrange(desc(total_weeks))
+
+
+# Reorder 'author' by 'total_weeks' in descending order
+authors_total_weeks$author <- factor(authors_total_weeks$author, 
+                                     levels = authors_total_weeks$author[order(-authors_total_weeks$total_weeks)])
+
+# Plotting a bar graph for authors 
+ggplot(authors_total_weeks, aes(x = author, y = total_weeks)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(x = "Author", y = "Total Weeks", title = "Top 10 authors in the bestseller list for the most number of weeks") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+
+```
+
+In this figure @Top_10_authors_for_most_no_of_weeks we can see that, Dr. Seuss and Dan Brown who are the authors of the books "Oh, the places you will go!" and "The Da Vinci Code" are the top authors who appeared in the list for the most number of weeks. 
+
+### **Highest number of weeks a book appeared in the list in each year**
+
+```{r fig-8}
+#| label: Highest_no_of_weeks_for_each_year
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: " This figure shows year by year analysis of the highest number of weeks a book in the best seller list from 2020 to 2022. We have used the group_by function to find the book with the highest number of total weeks for each year. The line chart was drawn from geom_line in the 'ggplot2'[@ggplot2-package] and it shows how the highest number of weeks a book appeared in the list changes throughout these 20 years. A list was created to show the top book for each year separately and using grid.arrange function in 'gridExtra' [@gridExtra-package]these 2 plots were arranged side by side."
+#| echo: false
+
+
+# Group data by 'year' and find the book with the highest total_weeks for each year
+highest_total_weeks_per_year <- final_data %>%
+  group_by(year) %>%
+  slice(which.max(total_weeks)) %>%
+  ungroup()
+
+# Create a dataframe with the required columns
+weeks_per_year <- highest_total_weeks_per_year %>%
+  select(year, title_id, title, author, total_weeks)
+
+library(ggplot2)
+library(gridExtra)
+
+# Plot 1: Line graph for year and total weeks
+plot1 <- ggplot(weeks_per_year, aes(x = year, y = total_weeks)) +
+  geom_line(aes(color = "Total Weeks"), size = 1.5, show.legend = FALSE) +
+  labs(
+    title = "Highest number of weeks a book appeared in each year", 
+    x = "Year",
+    y = "Total Weeks"
+  ) +
+  scale_x_continuous(breaks = seq(min(weeks_per_year$year), max(weeks_per_year$year), by = 2)) +
+  scale_color_manual(values = c("Total Weeks" = "maroon")) +
+  geom_point(color = "black", size = 3) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Plot 2: Displaying year along with top book titles
+plot2 <- ggplot() +
+  geom_blank() +
+  labs() +  
+  theme_void()
+
+# Create text to display year and top book titles
+for (i in 1:nrow(weeks_per_year)) {
+  plot2 <- plot2 +
+    annotate(
+      "text",
+      x = 0.5, y = 1 - (i - 1) * 0.05,
+      label = paste(weeks_per_year$year[i], "-", weeks_per_year$title[i]),
+      size = 2  
+    )
+}
+
+# Arrange plots side by side in a single row with a separator line
+grid.arrange(
+  plot1, plot2,
+  ncol = 2, widths = c(0.7, 0.3),
+  layout_matrix = rbind(c(1, 2), c(1, 2)), heights = c(1, 0.01)
+)
+
+```
+
+From this figure @Highest_no_of_weeks_for_each_year we can see that in the year 2000, the book  "Oh, the places you will go!" was in the list for  178 weeks and this drastically dropped to 35 weeks in 2001. Again this increased to 165 weeks in 2003 with the book ""The Da Vinci Code". The lowest number of weeks a book appeared was 24 weeks and it was in 2005 and that book was "The mermaid chair". We can observe that in some years a book appeared in the list for a very long period of time whereas in some years books were in the list for a short time. 
+
+### Relationship between Debut Rank of a book and the Total Number of weeks in the list
+
+```{r fig-9}
+#| label: fig-debut-rank-vs-Tot-weeks
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: "This figure shows the jitter plot between the debut rank and the total number of weeks it was on the list. We have plotted a graph for each year by using year as the color. This plot was drawn from geom_jitter in the `ggplot2` [@ggplot2-package]."
+#| echo: false
+
+
+library(ggplot2)
+# Jitter plot with color representing years and separate plots for each year
+ggplot(final_data, aes(x = debut_rank, y = total_weeks, color = as.factor(year))) +
+  geom_jitter(alpha = 0.7) +
+  labs(title = "Jitter Plot: Debut Rank vs Total Weeks on the List",
+       x = "Debut Rank",
+       y = "Total Weeks on the List",
+       color = "Year") +
+  theme_minimal() +
+  facet_wrap(~ year, scales = "free")
+
+
+```
+
+
+According to @fig-debut-rank-vs-Tot-weeks we can see that the relationship between the two variables is not that strong. In the year 2005 we can see that books with a good debut rank have lasted for a longer time but this is not the case for the other years.
+
+
+### Top 10 authors in the list based on the number of appearances over the years
+
+```{r fig-10}
+#| label: fig-top-ten-based-on-num-of-appearence
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: "This figure shows a word cloud for the top ten authors who appeared in the list for the most number of times. We grouped the cleaned dataset by the author and counted the number of times they appeared on the list. Then we got the top ten authors and created a word cloud to visualise this.Here the size of the word represents the amount of times they appeared on the list.This plot was drawn from wordcloud in the `wordcloud` [@wordcloud-package]. "
+#| echo: false
+library(wordcloud)
+
+# Group by author and count the occurrences
+author_appearances <- final_data %>%
+  group_by(author) %>%
+  summarise(appearances = n())
+
+# Get the top ten authors with the highest number of appearances
+top_ten_authors <- author_appearances %>%
+  top_n(10, appearances)
+
+# Create a color palette for each author
+author_colors <- rainbow(length(top_ten_authors$author))
+
+# Word Cloud with Different Colors for Each Author
+wordcloud(words = top_ten_authors$author, freq = top_ten_authors$appearances, scale = c(3, 0.5), colors = author_colors)
+
+
+```
+
+
+When comparing this @fig-top-ten-based-on-num-of-appearence to the @Top_10_books_for_most_no_of_weeks that we drew , we can see that the authors who were considered as the top ten based on the total number weeks on the list and the number of times they appeared on the list is different. Hence, we can say that the authors who stay on the list for a long time are consistently popular, while those who appear frequently might become popular quickly, even if it's not for a long time. This shows that successful authors have different ways of being popular.
+
+### Debut rank distribution for the top 10 authors in the list based on the number of appearances over the years
+
+```{r fig-11}
+#| label: fig-debut-rank-distribution-for-above-top-ten
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: "This figure shows the box plots of the debut rank distribution for the top ten authors who appeared in the list for the most number of times. We filtered the data of these ten authors from the cleaned dataset and drew a box plot for each author with a different color. This plot was drawn from geom_boxplot in the `ggplot2` [@ggplot2-package]."
+#| echo: false
+
+
+library(ggplot2)
+##Comparing the debut ranks for the top ten authors based on the appearences in the list
+ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author, y = debut_rank, fill = author)) +
+  geom_boxplot() +
+  labs(title = "Box Plot: Debut Ranks for Top Ten Authors",
+       x = "Author",
+       y = "Debut Rank",
+       fill = "Author") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+Using this @fig-debut-rank-distribution-for-above-top-ten we can say that all of these authors did not get a a rank below five when their book first appeared on the list. Most of the books have ranked between 6 and 12 for most of them. 
+
+
+### Best rank distribution for the top 10 authors in the list based on the number of appearances over the years
+
+```{r fig-12}
+#| label: fig-best-rank-distribution-for-above-top-ten
+#| fig-width: 8
+#| fig-height: 4 # Change the figure dimensions using fig-width/height
+#| out-width: 80% # This changes the size of the figure as rendered in the text. 
+#| fig-cap: "This figure shows the jitter plots of the best rank distribution for the top ten authors who appeared in the list for the most number of times. We filtered the data of these ten authors from the cleaned dataset and drew a jitter plot for each author with a different color.This plot was drawn from geom_jitter in the `ggplot2` [@ggplot2-package]."
+#| echo: false
+
+
+library(ggplot2)
+##Best rank distribution for the top ten authors based on the appearences in the list
+ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author, y = best_rank, color = author)) +
+  geom_jitter(alpha = 0.7) +
+  labs(title = "Jitter Plot: Best Rank Distribution for Top Ten Authors",
+       x = "Author",
+       y = "Best Rank",
+       color = "Author") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+In this @fig-best-rank-distribution-for-above-top-ten  figure, we can see that Danielle Steel has a higher variability but this can be due to the difference in the number of books of each author. We can say that some of the books of that order did extremely well. Also, Janet Evanovich and John Grisham have most of the best ranks in the top five.
+
+
+
+
+
+
+
+
+
+
+
+
 
 You can find additional information about formatting figures generated from code in the [quarto documentation](https://quarto.org/docs/authoring/figures.html#computations).
 
 ## Additional Exploration topic
 
-##Shiny App:
-We have created a shiny graph to search the book according to the author. If anyone is interested to know the name of the author of any particular book, he/she will find this easily. This makes easy for anyone to search the author and see which books that particular author wrote.
-
+##Shiny App: We have created a shiny graph to search the book according to the author. If anyone is interested to know the name of the author of any particular book, he/she will find this easily. This makes easy for anyone to search the author and see which books that particular author wrote.
 
 Add another topic here... as many as you desire, really. Make sure to include a transition between the two sections that connects the two with some sort of logical train of thought.
-
 
 ## Conclusion
 
