@@ -48,6 +48,28 @@ nyt_full.tsv:
 
 -   author - author of the novel, as reported by the New York Times
 
+nyt_titles.tsv:
+
+-   id - an arbitrary unique id for the novel
+
+-    title - the title of the novel, as reported by the New York Times
+
+-    author - the author of the novel, as reported by the New York Times 
+
+-   year - the first year that the novel appears on the bestseller list. 
+
+-   total_weeks - the total number of weeks the title was on the list 
+
+-   first_week - the first week that the novel appears on the bestseller list 
+
+-   debut_rank - the book's bestseller rank in the week of its first appearance
+
+-   best_rank - the highest rank achieved by the title while on the list
+
+The above dataset will be used to explore different topics that will help book lovers to find out which authors have occasionally stayed on top of the best sellers list based on the total number of weeks or how many times they appeared on the list. We are considering data from 2000 to 2020, and we would like to look into the relationship between the debut rank and the total number of weeks a book has been on the list. In the meantime, we want to show the distribution of variables (year, total_week,debut_rank) in terms of bestsellers and a shiny app to find books by their author name. 
+
+We have two variables in our dataset which are the debut rank and best rank , but there were some anomalies where the best rank for some books was a value greater than the debut rank , maybe this was due to some incorrect data entries so we removed those records as a data cleaning process.
+
 ## Methods
 
 Describe any data cleaning and rearranging you needed to do to get your dataset into a workable form. Make sure to cite any packages which were important in your data cleaning process in this section. For instance, if you used dplyr, then it would be appropriate to say something like
