@@ -137,7 +137,7 @@ filtered_final <- filtered_final %>%
 
 > Our filtered_final dataset contains 13164 observations and 11 variables.
 
-```{}
+```         
 ```
 
 ## Line plot of the average total_weeks per year
@@ -463,34 +463,8 @@ grid.arrange(
 
 ```
 
-From this figure @Highest_no_of_weeks_by_first_year  we can see that out of the books that entered to the list in 1990, the book \"Oh, the places you will go!\" appeared on the list for the most number of weeks with 178 weeks. The book \"The Da Vinci Code\" which appeared in the list in 2003 for the first time was in the list for 165 weeks. Out of the books that entered to the list for the first time in 2005, the book  \"The mermaid chair\" was in the list for most weeks, but it is the lowest number of weeks compared with other years. 
+From this figure @Highest_no_of_weeks_by_first_year  we can see that out of the books that entered to the list in 1990, the book "Oh, the places you will go!" appeared on the list for the most number of weeks with 178 weeks. The book "The Da Vinci Code" which appeared in the list in 2003 for the first time was in the list for 165 weeks. Out of the books that entered to the list for the first time in 2005, the book  "The mermaid chair" was in the list for most weeks, but it is the lowest number of weeks compared with other years. 
 
-### Relationship between Debut Rank of a book and the Total Number of weeks in the list
-
-```{r fig-9}
-#| label: fig-debut-rank-vs-Tot-weeks
-#| fig-width: 8
-#| fig-height: 4 # Change the figure dimensions using fig-width/height
-#| out-width: 80% # This changes the size of the figure as rendered in the text. 
-#| fig-cap: "This figure shows the jitter plot between the debut rank and the total number of weeks it was on the list. We have plotted a graph for each year by using year as the color. This plot was drawn from geom_jitter in the `ggplot2` [@ggplot2-package]."
-#| echo: false
-
-
-library(ggplot2)
-# Jitter plot with color representing years and separate plots for each year
-ggplot(final_data, aes(x = debut_rank, y = total_weeks, color = as.factor(year))) +
-  geom_jitter(alpha = 0.7) +
-  labs(title = "Jitter Plot: Debut Rank vs Total Weeks on the List",
-       x = "Debut Rank",
-       y = "Total Weeks on the List",
-       color = "Year") +
-  theme_minimal() +
-  facet_wrap(~ year, scales = "free")
-
-
-```
-
-According to @fig-debut-rank-vs-Tot-weeks we can see that the relationship between the two variables is not that strong. In the year 2005 we can see that books with a good debut rank have lasted for a longer time but this is not the case for the other years.
 
 ### Top 10 authors in the list based on the number of appearances over the years
 
@@ -504,7 +478,7 @@ According to @fig-debut-rank-vs-Tot-weeks we can see that the relationship betwe
 library(wordcloud)
 
 # Group by author and count the occurrences
-author_appearances <- final_data %>%
+author_appearances <- filtered_final %>%
   group_by(author) %>%
   summarise(appearances = n())
 
@@ -536,7 +510,7 @@ When comparing this @fig-top-ten-based-on-num-of-appearence to the @Top_10_books
 
 library(ggplot2)
 ##Comparing the debut ranks for the top ten authors based on the appearences in the list
-ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author, y = debut_rank, fill = author)) +
+ggplot(filtered_final %>% filter(author %in% top_ten_authors$author), aes(x = author, y = debut_rank, fill = author)) +
   geom_boxplot() +
   labs(title = "Box Plot: Debut Ranks for Top Ten Authors",
        x = "Author",
@@ -546,7 +520,8 @@ ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-Using this @fig-debut-rank-distribution-for-above-top-ten we can say that all of these authors did not get a a rank below five when their book first appeared on the list. Most of the books have ranked between 6 and 12 for most of them.
+Using this @fig-debut-rank-distribution-for-above-top-ten we can say that all of these authors did not get a a rank below five when their book first appeared on the list. Most of the books have ranked between 6 and 15 for most of them. Also we can see that Mitch Albom appeared on the list for a long time, but he only has a very few books compared to the other authors.
+He has only written a few books but they managed to made it to the list a number of times.
 
 ### Best rank distribution for the top 10 authors in the list based on the number of appearances over the years
 
@@ -561,7 +536,7 @@ Using this @fig-debut-rank-distribution-for-above-top-ten we can say that all of
 
 library(ggplot2)
 ##Best rank distribution for the top ten authors based on the appearences in the list
-ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author, y = best_rank, color = author)) +
+ggplot(filtered_final %>% filter(author %in% top_ten_authors$author), aes(x = author, y = best_rank, color = author)) +
   geom_jitter(alpha = 0.7) +
   labs(title = "Jitter Plot: Best Rank Distribution for Top Ten Authors",
        x = "Author",
@@ -572,7 +547,7 @@ ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author
 
 ```
 
-In this @fig-best-rank-distribution-for-above-top-ten figure, we can see that Danielle Steel has a higher variability but this can be due to the difference in the number of books of each author. We can say that some of the books of that order did extremely well. Also, Janet Evanovich and John Grisham have most of the best ranks in the top five.
+In this @fig-best-rank-distribution-for-above-top-ten figure, we can see that Danielle Steel has a higher variability but this can be due to the difference in the number of books of each author. We can say that some of the books of that author did extremely well. Also, John Grisham has most of his books in the top three.Mitch Albom wrote a relatively small number of books, but still he has managed to be among the top three best sellers.
 
 You can find additional information about formatting figures generated from code in the [quarto documentation](https://quarto.org/docs/authoring/figures.html#computations).
 
@@ -586,11 +561,19 @@ Add another topic here... as many as you desire, really. Make sure to include a 
 
 The study revealed some intriguing details about a few books that made the best-seller list and for which the total weeks distribution graph was mostly rightly skewed. "The Da Vinci Code" and "Oh, the Places You Will Go!" were viewed for 165 and 178 weeks, respectively.
 
-The books  \"Oh, the places you will go!\"  and \"The Da Vinci Code\" are the top books that appeared in the bestseller list for the most number of weeks. Dr. Seuss and Dan Brown who are the authors of these 2 books are the top authors who appeared in the list for the most number of weeks during the years 2000-2020.
+The books  "Oh, the places you will go!"  and "The Da Vinci Code" are the top books that appeared in the bestseller list for the most number of weeks. Dr. Seuss and Dan Brown who are the authors of these 2 books are the top authors who appeared in the list for the most number of weeks during the years 2000-2020.
 
-The book "Oh, the places you will go!\" first entered to the list in 1990 and was able to be in the bestseller list for more than 3 years. 
+The book "Oh, the places you will go!" first entered to the list in 1990 and was able to be in the bestseller list for more than 3 years. 
 
 There is a negative correlation between debut rank and total weeks, meaning that books with higher debut ranks don't necessarily stay on the best-seller list. The regression model indicates that staying on the list for a higher number of weeks is necessary to secure the top spot on the New York Times best-seller list.
+
+The top ten authors based on the total frequency they appeared in the bestseller list during the years 2000 -2020 did not have the highest number of weeks in the list but they made it to the list alot of times. This implies that the author's fame and success are based on how many times their work appears on the list and how long it remains there. Certain authors, such as Mitch Albom, had relatively few novels on the bestseller list, yet they were able to make frequent appearances for the few works they did write.
+
+Debut rank and total weeks have a negative association, indicating that books with higher debut ranks don't always stay on the best seller list. According to the regression model, securing the top spot on the New York Times best-seller list requires remaining on the list for a greater number of weeks.
+
+It is evident from the distribution of the best rank (@fig-best-rank-distribution-for-above-top-ten) that Danielle Steel's ranks have the largest variability. Additionally, the majority of John Grisham's books were among the top three bestsellers. Mitch Albom wrote a relatively small number of books, but still he has managed to be among the top three best sellers.
+
+The majority of these authors had strong debut ranks, as can be seen by glancing at their debut rankings. Additionally, some of their publications debuted between the ranks of 14 and 16, which is essentially in the top 20.
 
 ## Tips
 
