@@ -175,7 +175,7 @@ ggplot(average_weeks_per_year, aes(x = year, y = average_total_weeks, group = 1)
 
 ```
 
-***Topic:*** We tried to see on average which year has most of the Total Weeks on the Best Seller List. The @Avg_Total_Weeks_per_year line plot shows that the average total weeks was highest in 2004 and lowest in 2007 although the average was the same for 2011 and 2012. The number of average total weeks mostly increased by approximately 56% from 2002 to 2003 and decreased by 41% from 2005 to 2006. The `echo: false` option disables the printing of code (only output is displayed).
+***Topic:*** We tried to see on average which year has most of the Total Weeks on the Best Seller List. The @Avg_Total_Weeks_per_year line plot shows that the average total weeks was highest in 2004 and lowest in 2007 although the average was the same for 2011 and 2012. The number of average total weeks mostly increased by approximately 56% from 2002 to 2003 and decreased by 41% from 2005 to 2006.
 
 ### Debut Rank Distribution
 
@@ -323,7 +323,7 @@ By analyzing this regression model, we have found that to secure the best rank o
 
 **Checking Multicollinearity:** As both VIF value \<5, there is no multicollinearity on the predictor variable (total week and debut rank)
 
-Next we wanted to explore the variables best_rank, debut_rank and total_weeks. As these variables do not depend on the week,the book appeared on the list,  we filtered the dataset by keeping only the distinct title ids and carried out the rest of the analysis using this dataset.
+Next we wanted to explore the variables best_rank, debut_rank and total_weeks. As these variables do not depend on the week,the book appeared on the list, we filtered the dataset by keeping only the distinct title ids and carried out the rest of the analysis using this dataset.
 
 ### Top **10 books and authors in the bestseller list for the most number of weeks**
 
@@ -489,9 +489,7 @@ ggplot(final_data, aes(x = debut_rank, y = total_weeks, color = as.factor(year))
 
 ```
 
-
 According to @fig-debut-rank-vs-Tot-weeks we can see that the relationship between the two variables is not that strong. In the year 2005 we can see that books with a good debut rank have lasted for a longer time but this is not the case for the other years.
-
 
 ### Top 10 authors in the list based on the number of appearances over the years
 
@@ -522,7 +520,6 @@ wordcloud(words = top_ten_authors$author, freq = top_ten_authors$appearances, sc
 
 ```
 
-
 When comparing this @fig-top-ten-based-on-num-of-appearence to the @Top_10_books_for_most_no_of_weeks that we drew , we can see that the authors who were considered as the top ten based on the total number weeks on the list and the number of times they appeared on the list is different. Hence, we can say that the authors who stay on the list for a long time are consistently popular, while those who appear frequently might become popular quickly, even if it's not for a long time. This shows that successful authors have different ways of being popular.
 
 ### Debut rank distribution for the top 10 authors in the list based on the number of appearances over the years
@@ -548,9 +545,7 @@ ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-
-Using this @fig-debut-rank-distribution-for-above-top-ten we can say that all of these authors did not get a a rank below five when their book first appeared on the list. Most of the books have ranked between 6 and 12 for most of them. 
-
+Using this @fig-debut-rank-distribution-for-above-top-ten we can say that all of these authors did not get a a rank below five when their book first appeared on the list. Most of the books have ranked between 6 and 12 for most of them.
 
 ### Best rank distribution for the top 10 authors in the list based on the number of appearances over the years
 
@@ -576,20 +571,7 @@ ggplot(final_data %>% filter(author %in% top_ten_authors$author), aes(x = author
 
 ```
 
-
-In this @fig-best-rank-distribution-for-above-top-ten  figure, we can see that Danielle Steel has a higher variability but this can be due to the difference in the number of books of each author. We can say that some of the books of that order did extremely well. Also, Janet Evanovich and John Grisham have most of the best ranks in the top five.
-
-
-
-
-
-
-
-
-
-
-
-
+In this @fig-best-rank-distribution-for-above-top-ten figure, we can see that Danielle Steel has a higher variability but this can be due to the difference in the number of books of each author. We can say that some of the books of that order did extremely well. Also, Janet Evanovich and John Grisham have most of the best ranks in the top five.
 
 You can find additional information about formatting figures generated from code in the [quarto documentation](https://quarto.org/docs/authoring/figures.html#computations).
 
@@ -601,7 +583,10 @@ Add another topic here... as many as you desire, really. Make sure to include a 
 
 ## Conclusion
 
-Here, you want to summarize the main points of what you've learned from this investigation, in paragraph form.
+The study revealed some intriguing details about a few books that made the best-seller list and for which the total weeks distribution graph was mostly rightly skewed. "The Da Vinci Code" and "Oh, the Places You Will Go!" were viewed for 165 and 178 weeks, respectively. 
+
+There is a negative correlation between debut rank and total weeks, meaning that books with higher debut ranks don't necessarily stay on the best-seller list. The regression model indicates that staying on the list for a higher number of weeks is necessary to secure the top spot on the New York Times best-seller list. 
+
 
 ## Tips
 
