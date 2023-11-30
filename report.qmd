@@ -120,7 +120,7 @@ filtered_data <- result %>%
 
 ```
 
-> We created a new variable and added a new column called rank_difference by subtracting the best_rank from debut_rank. This is because there were some records where there were some errors in these two columns, therefore we only kept the rows where the best rank was a value less than or equal to the debut rank. We used the `filter` function from [@dplyr-package] `dplyr` package to do this. We used this dataset (filtered_final) to do some of our analysis. Since we wanted to check the correlation and fit a regression model we used this filtered dataset to explore our objectives.
+> We created a new variable and added a new column called rank_difference by subtracting the best_rank from debut_rank. This is because there were some records where there were some errors in these two columns, therefore we only kept the rows where the best rank was a value less than or equal to the debut rank. We used the `filter` function from [@dplyr-package] `dplyr` package to do this. We used this dataset (filtered_final) to do our analysis. Since we wanted to check the correlation and fit a regression model we used this filtered dataset to explore our objectives.
 
 ```{r}
 #| echo: false
@@ -135,15 +135,9 @@ filtered_final <- filtered_final %>%
 
 ```
 
-> There were many records for one book title and due to that we were not able to obtain meaningful results and clear visual representations. Another topic we wanted to explore was comparing the variables best_rank, debut_rank and total_weeks. But these variables do not depend on the week the book appeared on the list, it only depends on the title id of the book. Therefore to get a more clear idea we filtered the dataset by keeping only the distinct title ids and carried out the rest of the analysis using this dataset.We used the `filter` function from [@dplyr-package] `dplyr` package to do this.Our filtered_final dataset contains 13164 observations and 11 variables. And the dataset we obtained after getting only the unique title id's had 2276 observations and 11 variables.
+> Our filtered_final dataset contains 13164 observations and 11 variables.
 
-```{r}
-#| echo: false
-
-# Keep only one row per book
-final_data <- filtered_final %>%
-  distinct(title_id, .keep_all=TRUE)
-
+```{}
 ```
 
 ## Line plot of the average total_weeks per year
@@ -337,21 +331,20 @@ Next we wanted to explore the variables best_rank, debut_rank and total_weeks. A
 
 library(dplyr)
 
-#getting the top 10 tiltles by arranging the total weeks in descending order
-top_10_records <- final_data %>%
+top_10_records1 <- filtered_final %>%
   arrange(desc(total_weeks)) %>%
-  slice(1:10) %>%
-  select(title_id, title, total_weeks)
+  distinct(title_id, .keep_all = TRUE) %>%
+  slice(1:10)
 
-
-# Reorder 'title' by 'total_weeks' in descending order
-top_10_records$title <- factor(top_10_records$title, levels = top_10_records$title[order(-top_10_records$total_weeks)])
+library(ggplot2)
+# Reordering 'title' by 'total_weeks' in descending order
+top_10_records1$title <- factor(top_10_records1$title, levels = top_10_records1$title[order(-top_10_records1$total_weeks)])
 
 # Create a new column 'label' to assign labels from 1 to 10 for bars on the x-axis
-top_10_records$label <- factor(1:10, labels = 1:10)
+top_10_records1$label <- factor(1:10, labels = 1:10)
 
 # Plotting the bar graph
-plot <- ggplot(top_10_records, aes(x = label, y = total_weeks, fill = title)) +
+plot <- ggplot(top_10_records1, aes(x = label, y = total_weeks, fill = title)) +
   geom_bar(stat = "identity") +
   labs(x = "Books", y = "Total Weeks", title = "Top 10 books in the bestseller list for the most number of weeks") +
   theme(axis.text.x = element_text(angle = 360, vjust = 0.5, hjust = 1))
@@ -373,68 +366,73 @@ According to this figure @Top_10_books_for_most_no_of_weeks we can see that the 
 
 # For authors
 
-# Extract titles from the top 10 records
-top_10_titles <- top_10_records$title
+library(ggplot2)
 
-# Filter 'final_data' for the top 10 titles and select specific columns, arranging in descending order of total_weeks
-authors_total_weeks <- final_data %>%
-  filter(title %in% top_10_titles) %>%
-  select(title_id, title, author, total_weeks) %>%
-  arrange(desc(total_weeks))
+# Reorder 'author' in reverse for plotting
+top_10_records1$author <- factor(top_10_records1$author, levels = rev(top_10_records1$author))
 
-
-# Reorder 'author' by 'total_weeks' in descending order
-authors_total_weeks$author <- factor(authors_total_weeks$author, 
-                                     levels = authors_total_weeks$author[order(-authors_total_weeks$total_weeks)])
-
-# Plotting a bar graph for authors 
-ggplot(authors_total_weeks, aes(x = author, y = total_weeks)) +
-  geom_bar(stat = "identity", fill = "blue") +
-  labs(x = "Author", y = "Total Weeks", title = "Top 10 authors in the bestseller list for the most number of weeks") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+# Plotting the bar chart
+ggplot(top_10_records1, aes(x = author, y = total_weeks)) +
+  geom_bar(stat = "identity", fill = "navyblue") +
+  labs(title = "Top 10 authors in the bestseller list for the most number of weeks",
+       x = "Author",
+       y = "Total Weeks") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
 
 
 ```
 
 In this figure @Top_10_authors_for_most_no_of_weeks we can see that, Dr. Seuss and Dan Brown who are the authors of the books "Oh, the places you will go!" and "The Da Vinci Code" are the top authors who appeared in the list for the most number of weeks. 
 
-### **Highest number of weeks a book appeared in the list in each year**
+### **Highest number of weeks a book appeared in the list based on the first year book entered to the list**
 
 ```{r fig-8}
-#| label: Highest_no_of_weeks_for_each_year
+#| label: Highest_no_of_weeks_by_first_year
 #| fig-width: 8
 #| fig-height: 4 # Change the figure dimensions using fig-width/height
 #| out-width: 80% # This changes the size of the figure as rendered in the text. 
-#| fig-cap: " This figure shows year by year analysis of the highest number of weeks a book in the best seller list from 2020 to 2022. We have used the group_by function to find the book with the highest number of total weeks for each year. The line chart was drawn from geom_line in the 'ggplot2'[@ggplot2-package] and it shows how the highest number of weeks a book appeared in the list changes throughout these 20 years. A list was created to show the top book for each year separately and using grid.arrange function in 'gridExtra' [@gridExtra-package]these 2 plots were arranged side by side."
+#| fig-cap: "This figure shows the highest number of weeks that a book appeared in the list based on the first year it appeared in the list. We have separated the year from the variable first_week and created the first_year variable. We have used the group_by function to find the book with the highest number of total weeks for each first year. The line chart was drawn from geom_line in the 'ggplot2'[@ggplot2-package] and it shows how the highest number of weeks a book appeared in the list changes based on the first year it appeared on the list. A list was created to show the name of the top book for each first year separately and using grid.arrange function in 'gridExtra' [@gridExtra-package]these 2 plots were arranged side by side."
 #| echo: false
 
 
-# Group data by 'year' and find the book with the highest total_weeks for each year
-highest_total_weeks_per_year <- final_data %>%
-  group_by(year) %>%
-  slice(which.max(total_weeks)) %>%
+# obtaining the first year
+library(lubridate)
+filtered_final$first_year<- year(filtered_final$first_week)
+
+# Group data by 'first_year' and find the book with the highest total_weeks
+highest_total_weeks_per_year <- filtered_final %>%
+  group_by(first_year) %>%
+  arrange(desc(total_weeks)) %>%
+  slice(1) %>%
   ungroup()
 
 # Create a dataframe with the required columns
 weeks_per_year <- highest_total_weeks_per_year %>%
-  select(year, title_id, title, author, total_weeks)
+  select(first_year, title_id, title, author, total_weeks)
 
 library(ggplot2)
 library(gridExtra)
 
+# Convert 'year' column to numeric
+highest_total_weeks_per_year$first_year <- as.numeric(weeks_per_year$first_year)
+
+# Check for any non-finite values
+any(!is.finite(weeks_per_year$first_year))  # Check for non-finite values
+
 # Plot 1: Line graph for year and total weeks
-plot1 <- ggplot(weeks_per_year, aes(x = year, y = total_weeks)) +
+plot1 <- ggplot(weeks_per_year, aes(x = first_year, y = total_weeks)) +
   geom_line(aes(color = "Total Weeks"), size = 1.5, show.legend = FALSE) +
   labs(
-    title = "Highest number of weeks a book appeared in each year", 
-    x = "Year",
+    title = "Highest number of weeks based on the first year book appeared in the list", 
+    x = "First year appeared in the list",
     y = "Total Weeks"
   ) +
-  scale_x_continuous(breaks = seq(min(weeks_per_year$year), max(weeks_per_year$year), by = 2)) +
+  scale_x_continuous(breaks = seq(min(weeks_per_year$first_year, na.rm = TRUE), max(weeks_per_year$first_year, na.rm = TRUE), by = 2)) +
   scale_color_manual(values = c("Total Weeks" = "maroon")) +
   geom_point(color = "black", size = 3) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(size = 10,face = "bold"))
 
 # Plot 2: Displaying year along with top book titles
 plot2 <- ggplot() +
@@ -448,7 +446,7 @@ for (i in 1:nrow(weeks_per_year)) {
     annotate(
       "text",
       x = 0.5, y = 1 - (i - 1) * 0.05,
-      label = paste(weeks_per_year$year[i], "-", weeks_per_year$title[i]),
+      label = paste(weeks_per_year$first_year[i], "-", weeks_per_year$title[i]),
       size = 2  
     )
 }
@@ -460,9 +458,12 @@ grid.arrange(
   layout_matrix = rbind(c(1, 2), c(1, 2)), heights = c(1, 0.01)
 )
 
+
+
+
 ```
 
-From this figure @Highest_no_of_weeks_for_each_year we can see that in the year 2000, the book  "Oh, the places you will go!" was in the list for  178 weeks and this drastically dropped to 35 weeks in 2001. Again this increased to 165 weeks in 2003 with the book ""The Da Vinci Code". The lowest number of weeks a book appeared was 24 weeks and it was in 2005 and that book was "The mermaid chair". We can observe that in some years a book appeared in the list for a very long period of time whereas in some years books were in the list for a short time. 
+From this figure @Highest_no_of_weeks_by_first_year  we can see that out of the books that entered to the list in 1990, the book \"Oh, the places you will go!\" appeared on the list for the most number of weeks with 178 weeks. The book \"The Da Vinci Code\" which appeared in the list in 2003 for the first time was in the list for 165 weeks. Out of the books that entered to the list for the first time in 2005, the book  \"The mermaid chair\" was in the list for most weeks, but it is the lowest number of weeks compared with other years. 
 
 ### Relationship between Debut Rank of a book and the Total Number of weeks in the list
 
@@ -583,10 +584,13 @@ Add another topic here... as many as you desire, really. Make sure to include a 
 
 ## Conclusion
 
-The study revealed some intriguing details about a few books that made the best-seller list and for which the total weeks distribution graph was mostly rightly skewed. "The Da Vinci Code" and "Oh, the Places You Will Go!" were viewed for 165 and 178 weeks, respectively. 
+The study revealed some intriguing details about a few books that made the best-seller list and for which the total weeks distribution graph was mostly rightly skewed. "The Da Vinci Code" and "Oh, the Places You Will Go!" were viewed for 165 and 178 weeks, respectively.
 
-There is a negative correlation between debut rank and total weeks, meaning that books with higher debut ranks don't necessarily stay on the best-seller list. The regression model indicates that staying on the list for a higher number of weeks is necessary to secure the top spot on the New York Times best-seller list. 
+The books  \"Oh, the places you will go!\"  and \"The Da Vinci Code\" are the top books that appeared in the bestseller list for the most number of weeks. Dr. Seuss and Dan Brown who are the authors of these 2 books are the top authors who appeared in the list for the most number of weeks during the years 2000-2020.
 
+The book "Oh, the places you will go!\" first entered to the list in 1990 and was able to be in the bestseller list for more than 3 years. 
+
+There is a negative correlation between debut rank and total weeks, meaning that books with higher debut ranks don't necessarily stay on the best-seller list. The regression model indicates that staying on the list for a higher number of weeks is necessary to secure the top spot on the New York Times best-seller list.
 
 ## Tips
 
