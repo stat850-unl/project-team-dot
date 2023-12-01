@@ -44,6 +44,24 @@ By analyzing this regression model, we have found that to secure the best rank o
 
 ![](images/000015.png){width="824"}
 
+## Top 10 books in the list for the most number of weeks
+
+The book "Oh, the places you will go!" is the book that appeared in the bestseller list for the most number of weeks. The book "The Da Vinci Code" is also among the top books having appeared in the list for 165 weeks.
+
+![](top%20books.png)
+
+## Top 10 authors in the list for the most number of weeks
+
+Dr. Seuss and Dan Brown who are the authors of the books "Oh, the places you will go!" and "The Da Vinci Code" are the top authors who appeared in the list for the most number of weeks.
+
+![](top%20authors.png)
+
+## Highest no of weeks a book appeared in the list based on the first year
+
+The book "Oh, the places you will go!" first entered to the list in 1990 and was able to be in the bestseller list for more than 3 years.
+
+![](highest weeks by first year.png)
+
 ## Shiny App
 
 We have created a shiny graph to search the book according to the author. If anyone is interested to know the name of the author of any particular book, he/she will find this easily. This makes it easy for anyone to search the author and see which books that particular author wrote.
