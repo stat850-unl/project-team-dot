@@ -6,7 +6,7 @@ format: revealjs
 
 This dataset contains information about the fiction bestseller list of The New York Times between the years 1931 to 2020. This dataset includes the title, author(s), publication date, rank, and other information for every work recorded since the list's founding in 1931 but We are considering data from 2000 to 2020 and we would like to look into the relationship among different variables
 
-![](images-NY.jpeg){fig-align="center" width="5in"}
+![](nyt.png){fig-align="center"}
 
 ## Five number summeries
 
@@ -60,7 +60,25 @@ Dr. Seuss and Dan Brown who are the authors of the books "Oh, the places you wil
 
 The book "Oh, the places you will go!" first entered to the list in 1990 and was able to be in the bestseller list for more than 3 years.
 
-![](highest weeks by first year.png)
+![](highest%20weeks%20by%20first%20year.png)
+
+## Top 10 authors in the list based on the number of appearances over the years
+
+The top ten authors based on the total number of weeks on the list and the number of times they appeared on the list is different.
+
+![](wordcloud.png){fig-align="center"}
+
+## Debut rank distribution for the top 10 authors in the list based on the number of appearances over the years
+
+All of these authors did not get a a rank below five when their book first appeared on the list. Most of the books have ranked between 6 and 15 for these authors.
+
+![](debut_rank.png){fig-align="center"}
+
+## Best rank distribution for the top 10 authors in the list based on the number of appearances over the years
+
+Danielle Steel has a higher variability but this can be due to the difference in the number of books of each author. We can say that some of the books of that author did extremely well. Also, John Grisham has most of his books in the top three.
+
+![](best_rank.png){fig-align="center"}
 
 ## Shiny App
 
@@ -69,3 +87,9 @@ We have created a shiny graph to search the book according to the author. If any
 Link to see the graph:
 
 <https://tod-maksudatoma.shinyapps.io/app_new-1/>
+
+## Conclusion
+
+-   The study revealed some intriguing details about a few books that made the best-seller list and for which the total weeks distribution graph was mostly rightly skewed.
+-   Dr. Seuss and Dan Brown who are the authors of these 2 books are the top authors who appeared in the list for the most number of weeks during the years 2000-2020
+-   There is a negative correlation between debut rank and total weeks, meaning that books with higher debut ranks don't necessarily stay on the best-seller list.
