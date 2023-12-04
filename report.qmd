@@ -98,10 +98,10 @@ We have two variables in our dataset which are the debut rank and best rank , bu
 #| echo: false
 # Get the Data
 
-tuesdata <- tidytuesdayR::tt_load('2022-05-10')
-tuesdata <- tidytuesdayR::tt_load(2022, week = 19)
+#tuesdata <- tidytuesdayR::tt_load('2022-05-10')
+#tuesdata <- tidytuesdayR::tt_load(2022, week = 19)
 
-nyt_titles <- tuesdata$nyt_titles
+#nyt_titles <- tuesdata$nyt_titles
 
 # Or read in the data manually
 
@@ -281,7 +281,7 @@ ggplot(filtered_final, aes(x = total_weeks)) +
        x = "Total Weeks",
        y = "Density") +
   theme_minimal() +
-  scale_x_continuous(breaks = seq(0, max_weeks, by = 10)) +
+  scale_x_continuous(breaks = seq(0, by = 10)) +
   scale_color_manual(values = rainbow(length(unique(outliers$title))))
 
 
@@ -672,18 +672,5 @@ It is evident from the distribution of the best rank (@fig-best-rank-distributio
 
 The majority of these authors had strong debut ranks, as can be seen by glancing at their debut rankings. Additionally, some of their publications debuted between the ranks of 14 and 16, which is essentially in the top 20.
 
-## Tips
-
-(delete this section from your report!)
-
-Almost anything you might want to know about how to format output in quarto can be found [here](https://quarto.org/docs/authoring/markdown-basics.html). Feel free to email/come to office hours to figure out how to do XYZ - part of the goal of making you write this report is that I want you to know how to write e.g. a journal paper in Quarto as well, so now's the time to experiment.
-
-If you want to know what the wordcount of your report is, you can run the following command in your terminal:
-
 ```         
-pandoc --lua-filter wordcount.lua report.qmd
 ```
-
-Notice that I have not pushed `_output/report.html` or the `_output/report_files/` folder to github - this is intentional. I have actually set `_output` to not show up in git, to encourage you all to NOT push the rendered files to github and to instead work from the markdown files directly.
-
-You may find it cleaner to create a figure subdirectory and store any figures that aren't created by R/Python in that folder. I encourage you to organize this repository in a sensible way.
