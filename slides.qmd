@@ -91,5 +91,5 @@ Link to see the graph:
 ## Conclusion
 
 -   The study revealed some intriguing details about a few books that made the best-seller list and for which the total weeks distribution graph was mostly rightly skewed.
--   Dr. Seuss and Dan Brown who are the authors of these 2 books are the top authors who appeared in the list for the most number of weeks during the years 2000-2020
+-   "Oh, the places you will go!" and "The Da Vinci Code" are the top books that who appeared in the list for the most number of weeks.
 -   There is a negative correlation between debut rank and total weeks, meaning that books with higher debut ranks don't necessarily stay on the best-seller list.
