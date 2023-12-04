@@ -94,7 +94,7 @@ We have two variables in our dataset which are the debut rank and best rank , bu
 
 > As there are 2 datasets, nyt_titles and nyt_full we combined the 2 datasets and obtained a single dataframe. We used the `left_join` function from [@dplyr-package] `dplyr` package and combined 2 datasets using the title_id. As we are only interested in bestseller books from 2000 to 2020, we filtered the records from 2000 to 2020 from the combined dataset using the `filter` function.
 
-```{r}
+```{r, include = FALSE}
 #| echo: false
 # Get the Data
 
@@ -137,10 +137,7 @@ filtered_final <- filtered_final %>%
 
 > Our filtered_final dataset contains 13164 observations and 11 variables.
 
-```         
-```
-
-## Five number summary of 'total_weeks', 'debut_rank', 'best_rank' and their plot 
+## Five number summary of 'total_weeks', 'debut_rank', 'best_rank' and their plot
 
 ```{r fig-1}
 #| label: Five_number_summary_with_box_plot
@@ -194,26 +191,28 @@ par(mfrow = c(3, 3))
 We have created @Five_number_summary_with_box_plot to show the summary of numeric variable of this data set.
 
 Five-number summary for total_weeks :
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1.00    5.00    8.00   18.75   15.00  178.00 
+
+Min. 1st Qu. Median Mean 3rd Qu. Max.
+
+1.00 5.00 8.00 18.75 15.00 178.00
 
 Five-number summary for debut_rank :
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   6.000   9.000   9.184  13.000  17.000 
+
+Min. 1st Qu. Median Mean 3rd Qu. Max.
+
+1.000 6.000 9.000 9.184 13.000 17.000
 
 Five-number summary for best_rank :
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   1.000   2.000   2.899   4.000  16.000 
 
+Min. 1st Qu. Median Mean 3rd Qu. Max.
+
+1.000 1.000 2.000 2.899 4.000 16.000
 
 These Boxplots represent the interquartile range (IQR), which contains the middle 50% of the data for *total_weeks*, *debut_rank*, and *best_rank* variables on the NY Times best seller list.
 
-The black line inside the box represents the median of the data.
-Min/Max (Yellow and Purple) dashed lines represent the minimum and maximum values of the data.
-Quartile (Green, Black, and Orange) dashed lines represent the 1st quartile, median, and 3rd quartile, respectively.
+The black line inside the box represents the median of the data. Min/Max (Yellow and Purple) dashed lines represent the minimum and maximum values of the data. Quartile (Green, Black, and Orange) dashed lines represent the 1st quartile, median, and 3rd quartile, respectively.
 
-Whiskers: Indicate the range of the data. Typically, 1.5 times the IQR from the first and third quartiles.
-Outliers: Individual points beyond the whiskers are shown in the blue color. There are outliers in total_week and best_rank variables but not in debut_rank which means some data points on deviated from the mean value a lot for total_week and best_rank variables.
+Whiskers: Indicate the range of the data. Typically, 1.5 times the IQR from the first and third quartiles. Outliers: Individual points beyond the whiskers are shown in the blue color. There are outliers in total_week and best_rank variables but not in debut_rank which means some data points on deviated from the mean value a lot for total_week and best_rank variables.
 
 ## Line plot of the average total_weeks per year
 
@@ -245,7 +244,6 @@ ggplot(average_weeks_per_year, aes(x = year, y = average_total_weeks, group = 1)
 ```
 
 ***Interpretation:*** We tried to see on average which year has most of the Total Weeks on the Best Seller List. The @Avg_Total_Weeks_per_year line plot shows that the average total weeks was highest in 2004 and lowest in 2007 although the average was the same for 2011 and 2012. The number of average total weeks mostly increased by approximately 56% from 2002 to 2003 and decreased by 41% from 2005 to 2006.
-
 
 ### Total week distribution plot with outliers
 
@@ -289,18 +287,16 @@ ggplot(filtered_final, aes(x = total_weeks)) +
 
 ```
 
-
 ***Distribution of Total Weeks on Best Seller List with Outliers:***
 
 This @Total_Weeks_distribution_plot represents the distribution of the total number of weeks each book has spent on the bestseller list.The plot helps to identify which books deviate significantly from the typical pattern in terms of the total weeks on the bestseller list. Here, x axis shows the total weeks on the bestseller list. The scale indicates the range of weeks, and the breaks give reference points.
 
+-   The red shaded area represents the density distribution of the total weeks on the bestseller list. It gives an overview of how the values are distributed across the range. Here, vertical Blue Dashed Line is indicating the average number of total weeks. This graph helps to understand the central tendency of the data.
 
--  The red shaded area represents the density distribution of the total weeks on the bestseller list. It gives an overview of how the values are distributed across the range. Here, vertical Blue Dashed Line is indicating the average number of total weeks. This graph helps to understand the central tendency of the data.
-
-- Some outliers are also visible in this plot. The multicolored vertical line represent the outliers of the book names which stayed more than 80 weeks in the data.The text labels provide the titles of these outlier books.
-
+-   Some outliers are also visible in this plot. The multicolored vertical line represent the outliers of the book names which stayed more than 80 weeks in the data.The text labels provide the titles of these outlier books.
 
 ### Outlier bar chart with specific book
+
 ```{r fig-4}
 #| label: Outlier_bar_chart_with_specific_book
 #| fig-width: 8
@@ -326,12 +322,10 @@ ggplot(outliers_table, aes(x = reorder(Book_Title, -Total_Weeks), y = Total_Week
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
-***Interpretation:***
-This @Outlier_bar_chart_with_specific_book provides a visual summary of the distribution of total weeks, highlighting books that deviate significantly from the overall pattern.
 
-The bars represent individual books, and their heights indicate the total weeks each book stayed on the bestseller list.
-Outliers books with unusually high total weeks, are easily identified by observing bars that stand out from the rest.
-Books with similar total weeks have bars at similar heights.
+***Interpretation:*** This @Outlier_bar_chart_with_specific_book provides a visual summary of the distribution of total weeks, highlighting books that deviate significantly from the overall pattern.
+
+The bars represent individual books, and their heights indicate the total weeks each book stayed on the bestseller list. Outliers books with unusually high total weeks, are easily identified by observing bars that stand out from the rest. Books with similar total weeks have bars at similar heights.
 
 ### Correlation Between Debut Rank and Total Weeks
 
@@ -425,7 +419,6 @@ By analyzing this regression model, we have found that to secure the best rank o
 **Checking Multicollinearity:** As both VIF value \<5, there is no multicollinearity on the predictor variable (total week and debut rank)
 
 Next we wanted to explore the variables best_rank, debut_rank and total_weeks. As these variables do not depend on the week,the book appeared on the list, we filtered the dataset by keeping only the distinct title ids and carried out the rest of the analysis using this dataset.
-
 
 ### Top **10 books and authors in the bestseller list for the most number of weeks**
 
@@ -573,7 +566,6 @@ grid.arrange(
 
 From this figure @Highest_no_of_weeks_by_first_year  we can see that out of the books that entered to the list in 1990, the book "Oh, the places you will go!" appeared on the list for the most number of weeks with 178 weeks. The book "The Da Vinci Code" which appeared in the list in 2003 for the first time was in the list for 165 weeks. Out of the books that entered to the list for the first time in 2005, the book  "The mermaid chair" was in the list for most weeks, but it is the lowest number of weeks compared with other years. 
 
-
 ### Top 10 authors in the list based on the number of appearances over the years
 
 ```{r fig-10}
@@ -628,8 +620,7 @@ ggplot(filtered_final %>% filter(author %in% top_ten_authors$author), aes(x = au
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-Using this @fig-debut-rank-distribution-for-above-top-ten we can say that all of these authors did not get a a rank below five when their book first appeared on the list. Most of the books have ranked between 6 and 15 for most of them. Also we can see that Mitch Albom appeared on the list for a long time, but he only has a very few books compared to the other authors.
-He has only written a few books but they managed to made it to the list a number of times.
+Using this @fig-debut-rank-distribution-for-above-top-ten we can say that all of these authors did not get a a rank below five when their book first appeared on the list. Most of the books have ranked between 6 and 15 for most of them. Also we can see that Mitch Albom appeared on the list for a long time, but he only has a very few books compared to the other authors. He has only written a few books but they managed to made it to the list a number of times.
 
 ### Best rank distribution for the top 10 authors in the list based on the number of appearances over the years
 
