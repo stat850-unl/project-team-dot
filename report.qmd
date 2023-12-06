@@ -188,25 +188,7 @@ par(mfrow = c(3, 3))
 
 ***Interpretation:***
 
-We have created @Five_number_summary_with_box_plot to show the summary of numeric variable of this data set.
-
-Five-number summary for total_weeks :
-
-Min. 1st Qu. Median Mean 3rd Qu. Max.
-
-1.00 5.00 8.00 18.75 15.00 178.00
-
-Five-number summary for debut_rank :
-
-Min. 1st Qu. Median Mean 3rd Qu. Max.
-
-1.000 6.000 9.000 9.184 13.000 17.000
-
-Five-number summary for best_rank :
-
-Min. 1st Qu. Median Mean 3rd Qu. Max.
-
-1.000 1.000 2.000 2.899 4.000 16.000
+We have created @Five_number_summary_with_box_plot to show the summary of numeric variable of this data set.s
 
 These Boxplots represent the interquartile range (IQR), which contains the middle 50% of the data for *total_weeks*, *debut_rank*, and *best_rank* variables on the NY Times best seller list.
 
@@ -345,11 +327,6 @@ cat("Correlation between Total Weeks and Debut Rank:", correlation_value, "\n")
 
 library(ggplot2)
 
-# Calculate the correlation between Debut Rank and Total Weeks
-correlation_value <- cor(filtered_final$debut_rank, filtered_final$total_weeks)
-
-# Print the correlation value
-cat("Correlation between Debut Rank and Total Weeks:", correlation_value, "\n")
 
 # Plot a scatter plot
 ggplot(filtered_final, aes(x = debut_rank, y = total_weeks)) +
@@ -653,8 +630,6 @@ You can find additional information about formatting figures generated from code
 ## Additional Exploration topic
 
 ##Shiny App: We have created a shiny graph to search the book according to the author. If anyone is interested to know the name of the author of any particular book, he/she will find this easily. This makes easy for anyone to search the author and see which books that particular author wrote.
-
-Add another topic here... as many as you desire, really. Make sure to include a transition between the two sections that connects the two with some sort of logical train of thought.
 
 ## Conclusion
 
