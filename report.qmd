@@ -395,8 +395,6 @@ By analyzing this regression model, we have found that to secure the best rank o
 
 **Checking Multicollinearity:** As both VIF value \<5, there is no multicollinearity on the predictor variable (total week and debut rank)
 
-Next we wanted to explore the variables best_rank, debut_rank and total_weeks. As these variables do not depend on the week,the book appeared on the list, we filtered the dataset by keeping only the distinct title ids and carried out the rest of the analysis using this dataset.
-
 ### Top **10 books and authors in the bestseller list for the most number of weeks**
 
 ```{r fig-7}
@@ -625,11 +623,13 @@ ggplot(filtered_final %>% filter(author %in% top_ten_authors$author), aes(x = au
 
 In this @fig-best-rank-distribution-for-above-top-ten figure, we can see that Danielle Steel has a higher variability but this can be due to the difference in the number of books of each author. We can say that some of the books of that author did extremely well. Also, John Grisham has most of his books in the top three.Mitch Albom wrote a relatively small number of books, but still he has managed to be among the top three best sellers.
 
-You can find additional information about formatting figures generated from code in the [quarto documentation](https://quarto.org/docs/authoring/figures.html#computations).
+## Shiny App
 
-## Additional Exploration topic
+We have created a shiny graph to search the book according to the author. If anyone is interested to know the name of the author of any particular book, he/she will find this easily. This makes easy for anyone to search the author and see which books that particular author wrote.
 
-##Shiny App: We have created a shiny graph to search the book according to the author. If anyone is interested to know the name of the author of any particular book, he/she will find this easily. This makes easy for anyone to search the author and see which books that particular author wrote.
+Link to the app:
+
+<https://tod-maksudatoma.shinyapps.io/app_new-1/>
 
 ## Conclusion
 
